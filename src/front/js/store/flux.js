@@ -81,7 +81,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             logout: () => {
                 localStorage.removeItem("token");
-                setStore({ auth: { token: null, isAuthenticated: false } });
+                localStorage.removeItem("user_name");
+                setStore({ user: null, auth: { token: null, isAuthenticated: false } });
                 alert("Sesión cerrada");
             },
 

@@ -37,12 +37,16 @@ def login():
     if not email or not password:
         return jsonify({"msg": "Email y contraseña son requeridos"}), 400
     user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one_or_none()
-    if user is None:
+    if user is None or user.password != password:
         return jsonify({"msg": "Email o Contraseña incorrectos"}), 401
-    if user.password != password:
-        return jsonify({"msg": "Email o Contraseña incorrectas"}), 401
+
     access_token = create_access_token(identity=user.id)
-    return jsonify({"access_token": access_token, "user_id": user.id}), 200
+    
+    return jsonify({
+        "access_token": access_token, 
+        "user_id": user.id,
+        "user_name": user.name 
+    }), 200
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
