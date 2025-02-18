@@ -1,6 +1,9 @@
 const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
+
+            user: null,
+
             auth: {
                 token: localStorage.getItem("token") || null,
                 isAuthenticated: !!localStorage.getItem("token")
@@ -28,7 +31,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             getMessage: async () => {
                 try {
                     // fetching data from the backend
-                    const resp = await fetch(`https://glorious-journey-7vrqjqg757q62wp5w-3001.app.github.dev/api/hello`);
+                    const resp = await fetch(`https://silver-adventure-jj46p6xr744rfq5jw-3001.app.github.dev/api/hello`);
                     const data = await resp.json();
                     setStore({ message: data.message });
                     return data;
@@ -50,7 +53,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             login: async (email, password) => {
                 try {
-                    const response = await fetch("https://glorious-journey-7vrqjqg757q62wp5w-3001.app.github.dev/api/login", {
+                    const response = await fetch("https://silver-adventure-jj46p6xr744rfq5jw-3001.app.github.dev/api/login", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -62,16 +65,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                     if (response.ok) {
                         localStorage.setItem("token", data.access_token);
-                        setStore({ auth: { token: data.access_token, isAuthenticated: true } });
-                        alert("✅ Login exitoso");
+                        setStore({user:data.user_id, auth: { token: data.access_token, isAuthenticated: true } });
+                        alert("Login exitoso");
                         return true;
                     } else {
-                        alert(`❌ Error: ${data.msg}`);
+                        alert(`Error: ${data.msg}`);
                         return false;
                     }
                 } catch (error) {
                     console.error("Error durante el login:", error);
-                    alert("❌ Algo salió mal, por favor intenta de nuevo.");
+                    alert("Algo salió mal, por favor intenta de nuevo.");
                     return false;
                 }
             },
@@ -86,7 +89,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             signup: async (name, email, password) => {
                 try {
-                    const response = await fetch("https://glorious-journey-7vrqjqg757q62wp5w-3001.app.github.dev/api/signup", {  
+                    const response = await fetch("https://silver-adventure-jj46p6xr744rfq5jw-3001.app.github.dev/api/signup", {  
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -97,15 +100,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                     const data = await response.json();
 
                     if (response.ok) {
-                        alert("✅ Cuenta creada exitosamente!");
+                        alert("Cuenta creada exitosamente!");
                         return true;
                     } else {
-                        alert(`❌ Error: ${data.msg}`);
+                        alert(`Error: ${data.msg}`);
                         return false;
                     }
                 } catch (error) {
                     console.error("Error durante el registro:", error);
-                    alert("❌ Algo salió mal, por favor intenta de nuevo.");
+                    alert(" Algo salió mal, por favor intenta de nuevo.");
                     return false;
                 }
             }
