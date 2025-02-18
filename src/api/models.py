@@ -8,7 +8,9 @@ from typing import List
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = "user"
     id = db.Column(Integer, primary_key=True)
+    name = db.Column(String(120),  nullable=False)
     email = db.Column(String(120),  nullable=False)
     password = db.Column(String(80), nullable=False)
     is_active = db.Column(Boolean(),  nullable=False)
