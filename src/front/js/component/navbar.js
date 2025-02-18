@@ -6,7 +6,7 @@ import Logo from "../../img/PatinetaTravelLogo.png";
 export const Navbar = () => {
   const { store, actions } = useContext(Context);
   const isAuthenticated = store.auth.isAuthenticated;
-  const userName = store.user?.name || localStorage.getItem("user_name");
+  const userName = store.user?.name || localStorage.getItem("user_name");  // Obtener el nombre del usuario
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -38,17 +38,12 @@ export const Navbar = () => {
             </li>
           </ul>
 
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <div className="d-flex align-items-center ms-auto">
-              <span className="nav-link">👤 {userName}</span>
+              <span className="nav-link"> {userName}</span>
               <button className="btn btn-outline-danger ms-3" onClick={actions.logout}>
                 Logout
               </button>
-            </div>
-          ) : (
-            <div className="d-flex ms-auto">
-              <Link to="/login" className="btn btn-outline-primary me-2">Login</Link>
-              <Link to="/signup" className="btn btn-primary">Sign Up</Link>
             </div>
           )}
         </div>

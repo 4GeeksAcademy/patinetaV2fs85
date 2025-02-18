@@ -60,12 +60,16 @@ const getState = ({ getStore, getActions, setStore }) => {
                         },
                         body: JSON.stringify({ email, password })
                     });
-
+            
                     const data = await response.json();
-
+            
                     if (response.ok) {
                         localStorage.setItem("token", data.access_token);
-                        setStore({user:data.user_id, auth: { token: data.access_token, isAuthenticated: true } });
+                        localStorage.setItem("user_name", data.user_name);
+                        setStore({ 
+                            user: { id: data.user_id, name: data.user_name }, 
+                            auth: { token: data.access_token, isAuthenticated: true } 
+                        });
                         alert("Login exitoso");
                         return true;
                     } else {
