@@ -31,7 +31,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             getMessage: async () => {
                 try {
                     // fetching data from the backend
-                    const resp = await fetch(`https://silver-adventure-jj46p6xr744rfq5jw-3001.app.github.dev/api/hello`);
+                    const resp = await fetch(`process.env.BACKEND_URL + "/api/hello`);
                     const data = await resp.json();
                     setStore({ message: data.message });
                     return data;
@@ -53,7 +53,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             login: async (email, password) => {
                 try {
-                    const response = await fetch("https://silver-adventure-jj46p6xr744rfq5jw-3001.app.github.dev/api/login", {
+                    const response = await fetch("process.env.BACKEND_URL + /api/login", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -94,7 +94,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             signup: async (name, email, password) => {
                 try {
-                    const response = await fetch("https://silver-adventure-jj46p6xr744rfq5jw-3001.app.github.dev/api/signup", {  
+                    const response = await fetch("hprocess.env.BACKEND_URL + /api/signup", {  
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
