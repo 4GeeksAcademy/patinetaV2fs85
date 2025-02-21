@@ -31,6 +31,8 @@ def signup():
     db.session.commit()
     return jsonify({"msg": "Usuario creado exitosamente"}), 201
 
+
+
 @api.route("/login", methods=["POST"])
 def login():
     email = request.json.get("email", None)
@@ -50,70 +52,15 @@ def login():
     }), 200
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+# @api.route('/hello', methods=['POST', 'GET'])
+# def handle_hello():
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
+#     response_body = {
+#         "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
+#     }
 
-    return jsonify(response_body), 200
+#     return jsonify(response_body), 200
 
-# Endpoint Singup
-
-
-@api.route("/signup", methods=["POST"])
-def signup():
-
-    name = request.json.get("name", None)
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-
-
-    if not name  or not email or not password:
-        return jsonify({"msg": "Todos los campos son obligatorios"}), 400
-
-
-    user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one_or_none()
-
-
-    if user:
-        return jsonify({"msg": "El usuario ya existe"}), 400
-
-
-    new_user = User(name=name, email=email, password=password, is_active=True)
-    db.session.add(new_user)
-    db.session.commit()
-
-
-    return jsonify({"msg": "Usuario creado exitosamente"}), 201
-
-
-# Endpoint LOGIN
-
-@api.route("/login", methods=["POST"])
-def login():
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-
-
-    if not email or not password:
-        return jsonify({"msg": "Email y contraseña son requeridos"}), 400
-
-
-    user = db.session.execute(db.select(User).filter_by(email=email)).scalar_one_or_none()
-
-
-    if user is None:
-        return jsonify({"msg": "Email o Contraseña incorrectos"}), 401
-
-
-    if user.password != password:
-        return jsonify({"msg": "Email o Contraseña incorrectas"}), 401
-
-
-    access_token = create_access_token(identity=user.id)
-    return jsonify({"access_token": access_token, "user_id": user.id}), 200
 
 # Gets Usuarios_________
 
