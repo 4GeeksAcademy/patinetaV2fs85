@@ -1,15 +1,15 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Integer, String, Boolean
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import  relationship
+from sqlalchemy import Integer, String, Boolean, ForeignKey
+from sqlalchemy.orm import relationship
 from typing import List
-
 
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = "user"
     id = db.Column(Integer, primary_key=True)
-    email = db.Column(String(120),  nullable=False)
+    name = db.Column(String(120), nullable=False)
+    email = db.Column(String(120), nullable=False)
     password = db.Column(String(80), nullable=False)
     is_active = db.Column(Boolean(),  nullable=False)
     favorites_hotel=db.relationship("Favorites_hotel", backref="user")
@@ -21,15 +21,14 @@ class User(db.Model):
     hotel=db.relationship("Hotel", backref="user")
     interest_point=db.relationship("Interest_point", backref="user")
 
-    
     def serialize(self):
         return {
             "id": self.id,
             "email": self.email,
-            # do not serialize the password, its a security breach
+            
         }
-    
-class City (db.Model):
+
+class City(db.Model):
     __tablename__ = "city"
     id = db.Column(Integer, primary_key=True)
     city_name = db.Column(String(30), nullable=False)
@@ -51,11 +50,11 @@ class City (db.Model):
             "city_image":self.city_image
             # do not serialize the password, its a security breach
         }
-    
-class Restaurant (db.Model):
+
+class Restaurant(db.Model):
     __tablename__ = "restaurant"
-    id =db.Column(Integer,primary_key=True)
-    restaurant_name = db.Column (String(30), nullable=False)
+    id = db.Column(Integer, primary_key=True)
+    restaurant_name = db.Column(String(30), nullable=False)
     address = db.Column(String(100), nullable=False)
     restaurant_description = db.Column(String(300),nullable=False)
     user_id= db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -70,7 +69,7 @@ class Restaurant (db.Model):
             "restaurant_description": self.restaurant_description
             # do not serialize the password, its a security breach
         }
-    
+
 class Interest_point(db.Model):
     __tablename__ = "interest_point"
     id = db.Column(Integer, primary_key=True)
@@ -91,7 +90,7 @@ class Interest_point(db.Model):
             
             # do not serialize the password, its a security breach
         }
-    
+
 class Hotel(db.Model):
     __tablename__ = "hotel"
     id = db.Column(Integer, primary_key=True)
