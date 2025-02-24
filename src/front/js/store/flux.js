@@ -39,10 +39,75 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.log("Error loading message from backend", error);
                 }
             },
+            // LOGIN.JS
+
+            login: async (email, password) => {
+                try {
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        localStorage.setItem("token", data.access_token);
+                        localStorage.setItem("user_name", data.user_name);
+                        setStore({ 
+                            user: { id: data.user_id, name: data.user_name }, 
+                            auth: { token: data.access_token, isAuthenticated: true } 
+                        });
+                        alert("Login exitoso");
+                        return true;
+                    } else {
+                        alert(`Error: ${data.msg}`);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error("Error durante el login:", error);
+                    alert("Algo salió mal, por favor intenta de nuevo.");
+                    return false;
+                }
+            },
+
+            logout: () => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user_name");
+                setStore({ user: null, auth: { token: null, isAuthenticated: false } });
+                alert("Sesión cerrada");
+            },
+             // SIGNUP.JS (Registro)
+             signup: async (name, email, password) => {
+                try {
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/signup", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ name, email, password })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert("Cuenta creada exitosamente!");
+                        return true;
+                    } else {
+                        alert(`Error: ${data.msg}`);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error("Error durante el registro:", error);
+                    alert(" Algo salió mal, por favor intenta de nuevo.");
+                    return false;
+                }
+            },
+            
 
             fetchCity: async () => {
                 try {
-                    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/city");
                     const data = await response.json();
                     if (response.ok) {
                         setStore({ cities: data });

@@ -1,12 +1,10 @@
   
 import os
 from flask_admin import Admin
-from .models import db, User, City, Interest_point, Restaurant, Hotel, Favorites
+from .models import db, User, City, Interest_point, Restaurant, Hotel, Favorites_city, Favorites_interest_point, Favorites_hotel, Favorites_restaurant
 from flask_admin.contrib.sqla import ModelView
 
-class FavoritesView(ModelView):
-    column_list = ("favorites_user_id","favorites_hotel_id","favorites_city_id", "favorites_interest_point_id", 'favorites_restaurant_id')
-    form_columns = ("favorites_user_id","favorites_hotel_id","favorites_city_id", "favorites_interest_point_id", 'favorites_restaurant_id')
+
 
 def setup_admin(app):
     app.secret_key = os.environ.get('FLASK_APP_KEY', 'sample key')
@@ -19,8 +17,11 @@ def setup_admin(app):
     admin.add_view(ModelView(City, db.session))
     admin.add_view(ModelView(Restaurant, db.session))
     admin.add_view(ModelView(Interest_point, db.session))
+    admin.add_view(ModelView(Favorites_restaurant, db.session))
+    admin.add_view(ModelView(Favorites_interest_point, db.session))
+    admin.add_view(ModelView(Favorites_hotel, db.session))
+    admin.add_view(ModelView(Favorites_city, db.session))
     admin.add_view(ModelView(Hotel, db.session))
-    admin.add_view(FavoritesView(Favorites, db.session))
 
     # You can duplicate that line to add mew models
     # admin.add_view(ModelView(YourModelName, db.session))
