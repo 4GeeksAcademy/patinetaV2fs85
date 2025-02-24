@@ -11,7 +11,7 @@ class User(db.Model):
     name = db.Column(String(120),  nullable=False)
     email = db.Column(String(120),  nullable=False)
     password = db.Column(String(80), nullable=False)
-    is_active = db.Column(Boolean(),  nullable=False)
+    is_active = db.Column(Boolean(),  nullable=True)
     favorites_hotel=db.relationship("Favorites_hotel", backref="user")
     favorites_city=db.relationship("Favorites_city", backref="user")
     favorites_interest_point=db.relationship("Favorites_interest_point", backref="user")
