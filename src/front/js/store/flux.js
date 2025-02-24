@@ -53,7 +53,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             login: async (email, password) => {
                 try {
-                    const response = await fetch("process.env.BACKEND_URL + /api/login", {
+                    const response = await fetch("https://supreme-space-parakeet-pjgxv6564p9gh946-3001.app.github.dev/api/login", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
@@ -94,7 +94,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             signup: async (name, email, password) => {
                 try {
-                    const response = await fetch("hprocess.env.BACKEND_URL + /api/signup", {  
+                    const response = await fetch("https://supreme-space-parakeet-pjgxv6564p9gh946-3001.app.github.dev/api/signup", {  
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"

@@ -12,6 +12,8 @@ from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import JWTManager
 
+app = Flask(__name__)
+
 # from models import Person
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
@@ -34,6 +36,9 @@ jwt = JWTManager(app)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 MIGRATE = Migrate(app, db, compare_type=True)
 db.init_app(app)
+
+app.config["JWT_SECRET_KEY"] = ""  # Change this!
+jwt = JWTManager(app)
 
 # add the admin
 setup_admin(app)
