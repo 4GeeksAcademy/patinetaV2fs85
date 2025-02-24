@@ -104,3 +104,9 @@ class Favorites(db.Model):
             "restaurant_id": self.favorites_restaurant_id,
             "city_id": self.favorites_city_id
         }
+    
+
+
+
+
+
