@@ -1,14 +1,16 @@
-const getState = ({ getStore, getActions, setStore }) => {
+const getState = ({ getStore, getActions, setStore }) => { 
     return {
         store: {
-
             user: null,
-
             auth: {
                 token: localStorage.getItem("token") || null,
                 isAuthenticated: !!localStorage.getItem("token")
             },
             message: null, 
+            cities: [],
+            hotels: [],
+            restaurants: [],
+            interestPoints: [],
             demo: [
                 {
                     title: "FIRST",
@@ -23,15 +25,13 @@ const getState = ({ getStore, getActions, setStore }) => {
             ]
         },
         actions: {
-            // Use getActions to call a function within a function
             exampleFunction: () => {
                 getActions().changeColor(0, "green");
             },
 
             getMessage: async () => {
                 try {
-                    // fetching data from the backend
-                    const resp = await fetch(`process.env.BACKEND_URL + "/api/hello`);
+                    const resp = await fetch(`https://jsonplaceholder.typicode.com/posts`);
                     const data = await resp.json();
                     setStore({ message: data.message });
                     return data;
@@ -40,81 +40,51 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            changeColor: (index, color) => {
-                const store = getStore();
-                const demo = store.demo.map((elm, i) => {
-                    if (i === index) elm.background = color;
-                    return elm;
-                });
-                setStore({ demo: demo });
-            },
-
-            // LOGIN.JS
-
-            login: async (email, password) => {
+            fetchCity: async () => {
                 try {
-                    const response = await fetch("process.env.BACKEND_URL + /api/login", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ email, password })
-                    });
-            
+                    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
                     const data = await response.json();
-            
                     if (response.ok) {
-                        localStorage.setItem("token", data.access_token);
-                        localStorage.setItem("user_name", data.user_name);
-                        setStore({ 
-                            user: { id: data.user_id, name: data.user_name }, 
-                            auth: { token: data.access_token, isAuthenticated: true } 
-                        });
-                        alert("Login exitoso");
-                        return true;
-                    } else {
-                        alert(`Error: ${data.msg}`);
-                        return false;
+                        setStore({ cities: data });
                     }
                 } catch (error) {
-                    console.error("Error durante el login:", error);
-                    alert("Algo salió mal, por favor intenta de nuevo.");
-                    return false;
+                    console.error("Error obteniendo ciudades:", error);
                 }
             },
 
-            logout: () => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user_name");
-                setStore({ user: null, auth: { token: null, isAuthenticated: false } });
-                alert("Sesión cerrada");
-            },
-
-            // SIGNUP.JS (Registro)
-
-            signup: async (name, email, password) => {
+            fetchHotel: async () => {
                 try {
-                    const response = await fetch("hprocess.env.BACKEND_URL + /api/signup", {  
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ name, email, password })
-                    });
-
+                    const response = await fetch("https://jsonplaceholder.typicode.com/users");
                     const data = await response.json();
-
                     if (response.ok) {
-                        alert("Cuenta creada exitosamente!");
-                        return true;
-                    } else {
-                        alert(`Error: ${data.msg}`);
-                        return false;
+                        setStore({ hotels: data });
                     }
                 } catch (error) {
-                    console.error("Error durante el registro:", error);
-                    alert(" Algo salió mal, por favor intenta de nuevo.");
-                    return false;
+                    console.error("Error obteniendo hoteles:", error);
+                }
+            },
+
+            fetchRestaurant: async () => {
+                try {
+                    const response = await fetch("https://jsonplaceholder.typicode.com/users");
+                    const data = await response.json();
+                    if (response.ok) {
+                        setStore({ restaurants: data });
+                    }
+                } catch (error) {
+                    console.error("Error obteniendo restaurantes:", error);
+                }
+            },
+
+            fetchInterestPoint: async () => {
+                try {
+                    const response = await fetch("https://jsonplaceholder.typicode.com/todos");
+                    const data = await response.json();
+                    if (response.ok) {
+                        setStore({ interestPoints: data });
+                    }
+                } catch (error) {
+                    console.error("Error obteniendo puntos de interés:", error);
                 }
             }
         }
