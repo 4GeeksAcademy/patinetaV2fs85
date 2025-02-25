@@ -81,6 +81,7 @@ def solo_un_usuario(id):
     return jsonify({"msg":"user not exist"}), 404
  
 
+
 # Gets Ciudades________
 
 @api.route('/city', methods=['GET'])
@@ -152,40 +153,7 @@ def solo_un_restaurante(id):
 
     return jsonify({"msg":"Restaurant not exist"}), 404
  
-@api.route('/favorites-city/<int:id>', methods=['GET'])
-def traer_ciudad_favorita(id):
-    City = db.session.execute(select(Favorites_city).filter_by(id=id)).scalar_one()
-    response_body = {
-        "msg": "Hello, this is your favorito ",
-        "result":City.serialize()
-    }
-    return jsonify(response_body), 200
-@api.route('/favorites-hotel/<int:id>', methods=['GET'])
-def traer_hotel_favorito(id):
-    Hotel = db.session.execute(select(Favorites_hotel).filter_by(id=id)).scalar_one()
-    response_body = {
-        "msg": "Hello, this is your favorito ",
-        "result":Hotel.serialize()
-    }
-    return jsonify(response_body), 200
-@api.route('/favorites-restaurant/<int:id>', methods=['GET'])
-def traer_restaurant_favorito(id):
-    Restaurant = db.session.execute(select(Favorites_restaurant).filter_by(id=id)).scalar_one()
-    response_body = {
-        "msg": "Hello, this is your favorito ",
-        "result":Restaurant.serialize()
-    }
-    return jsonify(response_body), 200
-@api.route('/favorites-interest-point/<int:id>', methods=['GET'])
-def traer_interest_favorito(id):
-    Interest_point = db.session.execute(select(Favorites_interest_point).filter_by(id=id)).scalar_one()
-    response_body = {
-        "msg": "Hello, this is your favorito ",
-        "result":Interest_point.serialize()
-    }
-    return jsonify(response_body), 200
-
- 
+  
 # # Gets Interest_point _________
 
 @api.route('/Interest_point', methods=['GET'])
@@ -255,48 +223,38 @@ def solo_un_hotel(id):
     return jsonify({"msg":"Hotel not exist"}), 404
  
 
-
+# Gets de favoritos 
+ 
 @api.route('/favorites-city/<int:id>', methods=['GET'])
 def traer_ciudad_favorita(id):
-
     City = db.session.execute(select(Favorites_city).filter_by(id=id)).scalar_one()
-
     response_body = {
         "msg": "Hello, this is your favorito ",
         "result":City.serialize()
     }
     return jsonify(response_body), 200
 
-
 @api.route('/favorites-hotel/<int:id>', methods=['GET'])
 def traer_hotel_favorito(id):
-
     Hotel = db.session.execute(select(Favorites_hotel).filter_by(id=id)).scalar_one()
-
     response_body = {
         "msg": "Hello, this is your favorito ",
         "result":Hotel.serialize()
     }
     return jsonify(response_body), 200
 
-
 @api.route('/favorites-restaurant/<int:id>', methods=['GET'])
 def traer_restaurant_favorito(id):
-
     Restaurant = db.session.execute(select(Favorites_restaurant).filter_by(id=id)).scalar_one()
-
     response_body = {
         "msg": "Hello, this is your favorito ",
         "result":Restaurant.serialize()
     }
     return jsonify(response_body), 200
 
-
 @api.route('/favorites-interest-point/<int:id>', methods=['GET'])
 def traer_interest_favorito(id):
-
     Interest_point = db.session.execute(select(Favorites_interest_point).filter_by(id=id)).scalar_one()
-
     response_body = {
         "msg": "Hello, this is your favorito ",
         "result":Interest_point.serialize()
@@ -309,108 +267,109 @@ def traer_interest_favorito(id):
 
 
 # # # CITY
-# @api.route('/Favorites/city/<int:city_id>', methods=['POST'])
-# def agregar_ciudad_favorita(city_id):
-#     # Obtener el user_id desde el request (se recomienda que venga en el JSON)
-#     data = request.get_json()
-#     user_id = data.get('user_id')
-    
-#     if not user_id:
-#         return jsonify({"msg": "User ID is required"}), 400
-    
-#     # Verificar que el usuario existe
-#     user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
-#     if not user:
-#         return jsonify({"msg": "User not found"}), 404
 
-#     # Crear el favorito y asignar la ciudad
-#     new_favorito = Favorites(favorites_user_id=user.id, favorites_city_id=city_id)
-#     db.session.add(new_favorito)
-#     db.session.commit()
+@api.route('/favorites/city/<int:city_id>', methods=['POST'])
+def agregar_ciudad_favorita(city_id):
+    # Obtener el user_id desde el request (se recomienda que venga en el JSON)
+    data = request.get_json()
+    user_id = data.get('user_id')
+    
+    if not user_id:
+        return jsonify({"msg": "User ID is required"}), 400
+    
+    # Verificar que el usuario existe
+    user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
+    if not user:
+        return jsonify({"msg": "User not found"}), 404
 
-#     return jsonify({"msg": "Ciudad favorita agregada"}), 201
+    # Crear el favorito y asignar la ciudad
+    new_favorito = Favorites_city(favorites_user_id=user.id, favorites_city_id=city_id)
+    db.session.add(new_favorito)
+    db.session.commit()
+
+    return jsonify({"msg": "Ciudad favorita agregada"}), 201
 
 
 # # # Restaurant
 
-# @api.route('/favorite/Restaurant/<int:restaurant_id>', methods=['POST'])
-# def agregar_restaurant_favorito(restaurant_id):
-#     # Obtener el user_id desde el request (se recomienda que venga en el JSON)
-#     data = request.get_json()
-#     user_id = data.get('user_id')
+@api.route('/favorite/restaurant/<int:restaurant_id>', methods=['POST'])
+def agregar_restaurant_favorito(restaurant_id):
+    # Obtener el user_id desde el request (se recomienda que venga en el JSON)
+    data = request.get_json()
+    user_id = data.get('user_id')
 
 
-#     if not user_id:
-#         return jsonify({"msg": "User ID is required"}), 400
+    if not user_id:
+        return jsonify({"msg": "User ID is required"}), 400
 
 
-#     # Verificar que el usuario existe
-#     user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
-#     if not user:
-#         return jsonify({"msg": "User not found"}), 404
+    # Verificar que el usuario existe
+    user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
+    if not user:
+        return jsonify({"msg": "User not found"}), 404
 
 
-#     # Crear el favorito y asignar la ciudad
-#     new_favorito = Favorites(favorites_user_id=user.id, favorites_restaurant_id=restaurant_id)
-#     db.session.add(new_favorito)
-#     db.session.commit()
+    # Crear el favorito y asignar la ciudad
+    new_favorito = Favorites_restaurant(favorites_user_id=user.id, favorites_restaurant_id=restaurant_id)
+    db.session.add(new_favorito)
+    db.session.commit()
 
 
-#     return jsonify({"msg": "Restaurante favorita agregada"}), 201
+    return jsonify({"msg": "Restaurante favorita agregado"}), 201
 
 
 # # # Interest_point
-# @api.route('/favorite/Interest_point/<int:interest_point_id>', methods=['POST'])
-# def agregar_interest_point_favorito(interest_point_id):
-#     # Obtener el user_id desde el request (se recomienda que venga en el JSON)
-#     data = request.get_json()
-#     user_id = data.get('user_id')
+@api.route('/favorite/Interest_point/<int:interest_point_id>', methods=['POST'])
+def agregar_interest_point_favorito(interest_point_id):
+    # Obtener el user_id desde el request (se recomienda que venga en el JSON)
+    data = request.get_json()
+    user_id = data.get('user_id')
 
 
-#     if not user_id:
-#         return jsonify({"msg": "User ID is required"}), 400
+    if not user_id:
+        return jsonify({"msg": "User ID is required"}), 400
 
 
-#     # Verificar que el usuario existe
-#     user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
-#     if not user:
-#         return jsonify({"msg": "User not found"}), 404
+    # Verificar que el usuario existe
+    user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
+    if not user:
+        return jsonify({"msg": "User not found"}), 404
 
 
-#     # Crear el favorito y asignar la ciudad
-#     new_favorito = Favorites(favorites_user_id=user.id, favorites_interest_point_id=interest_point_id)
-#     db.session.add(new_favorito)
-#     db.session.commit()
+    # Crear el favorito y asignar la ciudad
+    new_favorito = Favorites_interest_point(favorites_user_id=user.id, favorites_interest_point_id=interest_point_id)
+    db.session.add(new_favorito)
+    db.session.commit()
 
 
-#     return jsonify({"msg": "Ciudad favorita agregada"}), 201
+    return jsonify({"msg": "Ciudad favorita agregada"}), 201
 
 
 # # # # Hotel
-# @api.route('/favorite/Hotel/<int:hotel_id>', methods=['POST'])
-# def agregar_hotel_favorito(hotel_id):
-#     # Obtener el user_id desde el request (se recomienda que venga en el JSON)
-#     data = request.get_json()
-#     user_id = data.get('user_id')
+@api.route('/favorite/hotel/<int:hotel_id>', methods=['POST'])
+def agregar_hotel_favorito(hotel_id):
+    # Obtener el user_id desde el request (se recomienda que venga en el JSON)
+    data = request.get_json()
+    user_id = data.get('user_id')
 
 
-#     if not user_id:
-#         return jsonify({"msg": "User ID is required"}), 400
+    if not user_id:
+        return jsonify({"msg": "User ID is required"}), 400
 
 
-#     # Verificar que el usuario existe
-#     user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
-#     if not user:
-#         return jsonify({"msg": "User not found"}), 404
+    # Verificar que el usuario existe
+    user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
+    if not user:
+        return jsonify({"msg": "User not found"}), 404
 
 
-#     # Crear el favorito y asignar el hotel
-#     new_favorito = Favorites(favorites_user_id=user.id, favorites_hotel_id=hotel_id)
-#     db.session.add(new_favorito)
-#     db.session.commit()
+    # Crear el favorito y asignar el hotel
+    new_favorito = Favorites_hotel(favorites_user_id=user.id, favorites_hotel_id=hotel_id)
+    db.session.add(new_favorito)
+    db.session.commit()
 
 
-#     return jsonify({"msg": "Hotel favorita agregado"}), 201
+    return jsonify({"msg": "Hotel favorita agregado"}), 201
 
 
 # # DELETE
@@ -435,11 +394,12 @@ def delete_city(city_id):
     if user is None:
         return jsonify({"msg": "User not found"}), 404
 
-    buscar_city_borrar = db.session.execute(db.select(Favorites_city).filter_by(favorites_user_id=user_id,favorites_city_id=city_id)).scalar_one_or_none()
+    buscar_city_borrar = db.session.execute(db.select(Favorites_city).filter_by(favorites_user_id=user_id,favorites_city_id=city_id)).scalar()
     print(buscar_city_borrar)
 
     if buscar_city_borrar is None:
         return jsonify({"msg": "Favorito no existe"}), 404
+    
     
     db.session.delete(buscar_city_borrar)
     db.session.commit()
@@ -450,109 +410,111 @@ def delete_city(city_id):
     return jsonify(response_body), 200
 
 # # Restaurant
-# @api.route('/favorite/restaurant/<int:restaurant_id>', methods=['DELETE'])
-# def delete_restaurant(restaurant_id):
 
-#     data = request.get_json()
-#     user_id = data.get('user_id')
+@api.route('/favorite/restaurant/<int:restaurant_id>', methods=['DELETE'])
+def delete_restaurant(restaurant_id):
 
-#     if not user_id:
-#       return jsonify({"msg": "No User send "}), 404
+    data = request.get_json()
+    user_id = data.get('user_id')
 
-
-
-#     user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
-#     # hacer filtrado
-#     if user is None:
-#         return jsonify({"msg": "User not found"}), 404
+    if not user_id:
+      return jsonify({"msg": "No User send "}), 404
 
 
-#     buscar_restaurant_favorito_borrar = db.session.execute(db.select(Favorites).filter_by(favorites_user_id=user_id,favorites_restaurant_id=restaurant_id)).scalar_one()
-#     print( buscar_restaurant_favorito_borrar)
 
-#     if buscar_restaurant_favorito_borrar is None:
-#         return jsonify({"msg": "Restaurante Favorito no existe"}), 404
+    user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
+    # hacer filtrado
+    if user is None:
+        return jsonify({"msg": "User not found"}), 404
+
+
+    buscar_restaurant_favorito_borrar = db.session.execute(db.select(Favorites_restaurant).filter_by(favorites_user_id=user_id,favorites_restaurant_id=restaurant_id)).scalar_one()
+    print( buscar_restaurant_favorito_borrar)
+
+    if buscar_restaurant_favorito_borrar is None:
+        return jsonify({"msg": "Restaurante Favorito no existe"}), 404
     
-#     db.session.delete(buscar_restaurant_favorito_borrar)
-#     db.session.commit()
+    db.session.delete(buscar_restaurant_favorito_borrar)
+    db.session.commit()
 
 
-#     response_body = {
-#         "msg":"Restaurant favorita del usuario BORRADO"
-#     }
+    response_body = {
+        "msg":"Restaurant favorita del usuario BORRADO"
+    }
 
 
-#     return jsonify(response_body), 200
+    return jsonify(response_body), 200
 
 
 
 # # Interest_point
-# @api.route('/favorite/interest_point/<int:interest_point_id>', methods=['DELETE'])
-# def delete_interest_point(interest_point_id):
+@api.route('/favorite/interest_point/<int:interest_point_id>', methods=['DELETE'])
+def delete_interest_point(interest_point_id):
 
-#     data = request.get_json()
-#     user_id = data.get('user_id')
+    data = request.get_json()
+    user_id = data.get('user_id')
 
-#     if not user_id:
-#       return jsonify({"msg": "No User send "}), 404
-
-
-#     user = db.session.execute(db.select(User).filter_by(id=id)).scalar_one()
-#     # hacer filtrado
-#     if not user:
-#         return jsonify({"msg": "User not found"}), 404
+    if not user_id:
+      return jsonify({"msg": "No User send "}), 404
 
 
-#     buscar_interest_pointfavorito_borrar = db.session.execute(db.select(Favorites).filter_by(favorites_user_id=user_id,favorites_interest_point_id=interest_point_id)).scalar_one()
+    user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
+    # hacer filtrado
+    if not user:
+        return jsonify({"msg": "User not found"}), 404
+
+
+    buscar_interest_pointfavorito_borrar = db.session.execute(db.select(Favorites_interest_point).filter_by(favorites_user_id=user_id,favorites_interest_point_id=interest_point_id)).scalar()
     
-#     if buscar_interest_pointfavorito_borrar is None:
-#         return jsonify({"msg": "El punto de interes Favorito no existe"}), 404
+    if buscar_interest_pointfavorito_borrar is None:
+        return jsonify({"msg": "El punto de interes Favorito no existe"}), 404
     
-#     db.session.delete(buscar_interest_pointfavorito_borrar)
-#     db.session.commit()
+    db.session.delete(buscar_interest_pointfavorito_borrar)
+    db.session.commit()
 
 
-#     response_body = {
-#         "msg":"Punto de Interes del usuario borrado "
-#     }
+    response_body = {
+        "msg":"Punto de Interes del usuario borrado "
+    }
 
 
-#     return jsonify(response_body), 200
+    return jsonify(response_body), 200
 
 
 
 # #Hotel
-# @api.route('/favorite/hotel/<int:hotel_id>', methods=['DELETE'])
-# def delete_hotel(hotel_id):
 
-#     data = request.get_json()
-#     user_id = data.get('user_id')
+@api.route('/favorite/hotel/<int:hotel_id>', methods=['DELETE'])
+def delete_hotel(hotel_id):
 
-#     if not user_id:
-#       return jsonify({"msg": "No User send "}), 404
+    data = request.get_json()
+    user_id = data.get('user_id')
 
-
-#     user = db.session.execute(db.select(User).filter_by(id=id)).scalar_one()
-#     # hacer filtrado
-#     if not user:
-#         return jsonify({"msg": "User not found"}), 404
+    if not user_id:
+      return jsonify({"msg": "No User send "}), 404
 
 
-#     buscar_hotel_borrar = db.session.execute(db.select(Favorites).filter_by(favorites_user_id=user_id,favorites_hotel_id=hotel_id)).scalar_one()
+    user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one()
+    # hacer filtrado
+    if not user:
+        return jsonify({"msg": "User not found"}), 404
+
+
+    buscar_hotel_borrar = db.session.execute(db.select(Favorites_hotel).filter_by(favorites_user_id=user_id,favorites_hotel_id=hotel_id)).scalar()
     
-#     if buscar_hotel_borrar is None:
-#         return jsonify({"msg": "El hotel Favorito no existe"}), 404
+    if buscar_hotel_borrar is None:
+        return jsonify({"msg": "El hotel Favorito no existe"}), 404
     
-#     db.session.delete(buscar_hotel_borrar)
-#     db.session.commit()
+    db.session.delete(buscar_hotel_borrar)
+    db.session.commit()
 
 
-#     response_body = {
-#         "msg":"Hotel favorita del usuario deleted"
-#     }
+    response_body = {
+        "msg":"Hotel favorita del usuario borrado"
+    }
 
 
-#     return jsonify(response_body), 200
+    return jsonify(response_body), 200
 
 
 
