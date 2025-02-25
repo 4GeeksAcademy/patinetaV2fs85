@@ -79,6 +79,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ user: null, auth: { token: null, isAuthenticated: false } });
                 alert("Sesión cerrada");
             },
+
              // SIGNUP.JS (Registro)
              signup: async (name, email, password) => {
                 try {
@@ -107,19 +108,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             fetchCity: async () => {
                 try {
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/city");
+                    console.log("Ejecutando fetchCity()");
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/city");
                     const data = await response.json();
+                    
                     if (response.ok) {
-                        setStore({ cities: data });
+                        console.log("Ciudades obtenidas:", data.results);
+                        setStore({ cities: data.results });
                     }
                 } catch (error) {
                     console.error("Error obteniendo ciudades:", error);
                 }
             },
+            
 
             fetchHotel: async () => {
                 try {
-                    const response = await fetch("https://jsonplaceholder.typicode.com/users");
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/hotel");
                     const data = await response.json();
                     if (response.ok) {
                         setStore({ hotels: data });
@@ -131,7 +136,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             fetchRestaurant: async () => {
                 try {
-                    const response = await fetch("https://jsonplaceholder.typicode.com/users");
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/restaurant");
                     const data = await response.json();
                     if (response.ok) {
                         setStore({ restaurants: data });
@@ -143,7 +148,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             fetchInterestPoint: async () => {
                 try {
-                    const response = await fetch("https://jsonplaceholder.typicode.com/todos");
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/interest_point");
                     const data = await response.json();
                     if (response.ok) {
                         setStore({ interestPoints: data });
