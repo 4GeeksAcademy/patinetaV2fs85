@@ -61,8 +61,15 @@ const SignUp = () => {
             {formik.touched.confirmPassword && formik.errors.confirmPassword && <p className="text-danger mt-1">{formik.errors.confirmPassword}</p>}
           </div>
 
-          <button type="submit" className="btn btn-primary w-100 mb-3" disabled={formik.isSubmitting || !formik.isValid}>Sign Up</button>
+          <button type="submit" className="btn btn-primary w-100 mb-3" disabled={formik.isSubmitting || !formik.isValid}>
+            Sign Up
+          </button>
         </form>
+
+        <div className="text-center">
+          <p className="mb-0">Already have an account?</p>
+          <button className="btn btn-link text-primary" onClick={() => navigate("/login")}>Log In</button>
+        </div>
       </div>
 
       <Modal show={modal.show} onHide={() => setModal({ ...modal, show: false })} centered>
