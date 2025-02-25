@@ -45,14 +45,12 @@ const getState = ({ getStore, getActions, setStore }) => {
                 try {
                     const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/login", {
                         method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                        headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ email, password })
                     });
-
+            
                     const data = await response.json();
-
+            
                     if (response.ok) {
                         localStorage.setItem("token", data.access_token);
                         localStorage.setItem("user_name", data.user_name);
@@ -60,24 +58,21 @@ const getState = ({ getStore, getActions, setStore }) => {
                             user: { id: data.user_id, name: data.user_name }, 
                             auth: { token: data.access_token, isAuthenticated: true } 
                         });
-                        alert("Login exitoso");
-                        return true;
+                        return { success: true }; 
                     } else {
-                        alert(`Error: ${data.msg}`);
-                        return false;
+                        return { success: false, msg: data.msg };
                     }
                 } catch (error) {
                     console.error("Error durante el login:", error);
-                    alert("Algo salió mal, por favor intenta de nuevo.");
-                    return false;
+                    return { success: false, msg: "Error de conexión con el servidor" };
                 }
             },
+            
 
             logout: () => {
                 localStorage.removeItem("token");
                 localStorage.removeItem("user_name");
                 setStore({ user: null, auth: { token: null, isAuthenticated: false } });
-                alert("Sesión cerrada");
             },
 
              // SIGNUP.JS (Registro)
@@ -85,25 +80,22 @@ const getState = ({ getStore, getActions, setStore }) => {
                 try {
                     const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/signup", {
                         method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                        headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ name, email, password })
                     });
+            
                     const data = await response.json();
+            
                     if (response.ok) {
-                        alert("Cuenta creada exitosamente!");
                         return true;
                     } else {
-                        alert(`Error: ${data.msg}`);
-                        return false;
+                        return data.msg; 
                     }
                 } catch (error) {
                     console.error("Error durante el registro:", error);
-                    alert(" Algo salió mal, por favor intenta de nuevo.");
-                    return false;
+                    return "Error de conexión con el servidor"; 
                 }
-            },
+            },            
             
 
             fetchCity: async () => {
