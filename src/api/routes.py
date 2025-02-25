@@ -419,40 +419,35 @@ def traer_interest_favorito(id):
 # #City
 
 
-# @api.route('/favorite/city/<int:city_id>', methods=['DELETE'])
-# def delete_city(city_id):
+@api.route('/favorite/city/<int:city_id>', methods=['DELETE'])
+def delete_city(city_id):
 
-#     data = request.get_json()
-#     print(data)
-#     print(city_id)
-#     user_id = data.get('user_id')
+    data = request.get_json()
+    print(data)
+    print(city_id)
+    user_id = data.get('user_id')
 
-#     if not user_id:
-#         return jsonify({"msg": "No User send "}), 404
+    if not user_id:
+        return jsonify({"msg": "No User send "}), 404
 
+    user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
+    # # hacer filtrado
+    if user is None:
+        return jsonify({"msg": "User not found"}), 404
 
-#     user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
-#     # # hacer filtrado
-#     if user is None:
-#         return jsonify({"msg": "User not found"}), 404
+    buscar_city_borrar = db.session.execute(db.select(Favorites_city).filter_by(favorites_user_id=user_id,favorites_city_id=city_id)).scalar_one_or_none()
+    print(buscar_city_borrar)
 
-
-#     buscar_city_favorito_borrar = db.session.execute(db.select(Favorites).filter_by(favorites_user_id=user_id,favorites_city_id=city_id)).scalar_one_or_none()
-#     print(buscar_city_favorito_borrar)
-
-#     if buscar_city_favorito_borrar is None:
-#         return jsonify({"msg": "Favorito no existe"}), 404
+    if buscar_city_borrar is None:
+        return jsonify({"msg": "Favorito no existe"}), 404
     
-#     db.session.delete(buscar_city_favorito_borrar)
-#     db.session.commit()
+    db.session.delete(buscar_city_borrar)
+    db.session.commit()
 
-
-#     response_body = {
-#         "msg":"Ciudad favorita del usuario borrada"
-#     }
-
-
-#     return jsonify(response_body), 200
+    response_body = {
+        "msg":"Ciudad favorita del usuario borrada"
+    }
+    return jsonify(response_body), 200
 
 # # Restaurant
 # @api.route('/favorite/restaurant/<int:restaurant_id>', methods=['DELETE'])
