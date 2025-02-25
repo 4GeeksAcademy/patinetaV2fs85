@@ -37,9 +37,9 @@ class City(db.Model):
     city_image= db.Column(String(200), nullable=False)
     user_id= db.Column(db.Integer, db.ForeignKey("user.id"))
     favorites_city =db.relationship("Favorites_city", backref="city")
-    restaurant=db.relationship("Restaurant", backref="city.id")
-    hotel=db.relationship("Hotel", backref="city.id")
-    interest_point=db.relationship("Interest_point", backref="city.id")
+    restaurant=db.relationship("Restaurant", backref="city")
+    hotel=db.relationship("Hotel", backref="city")
+    interest_point=db.relationship("Interest_point", backref="city")
 
     def serialize(self):
         return {
@@ -47,7 +47,10 @@ class City(db.Model):
             "city_name": self.city_name,
             "country_name": self.country_name,
             "city_description": self.city_description,
-            "city_image":self.city_image
+            "city_image":self.city_image,
+            "restaurant":list(map(lambda item: item.serialize() , self.restaurant)) if len(self.restaurant)>0 else [],
+            "hotel":list( map( lambda item: item.serialize() , self.hotel)) if len(self.hotel)>0 else [],
+            "interest_point":list(map(lambda item: item.serialize() , self.interest_point)) if len(self.interest_point)>0 else [],
             # do not serialize the password, its a security breach
         }
 
