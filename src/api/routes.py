@@ -152,6 +152,30 @@ def solo_un_restaurante(id):
 
     return jsonify({"msg":"Restaurant not exist"}), 404
  
+@api.route('/favorites', methods=['GET'])
+@jwt_required()  
+
+def get_all_favorites():
+    user_id = get_jwt_identity() 
+
+    favorite_cities = db.session.scalars(select(Favorites_city).filter_by(favorites_user_id=user_id)).all()
+    favorite_hotels = db.session.scalars(select(Favorites_hotel).filter_by(favorites_user_id=user_id)).all()
+    favorite_restaurants = db.session.scalars(select(Favorites_restaurant).filter_by(favorites_user_id=user_id)).all()
+    favorite_interest_points = db.session.scalars(select(Favorites_interest_point).filter_by(favorites_user_id=user_id)).all()
+
+    response_body = {
+        "msg": "Lista de favoritos",
+        "results": {
+        "cities": [fav.serialize() for fav in favorite_cities] if favorite_cities else [],
+        "hotels": [fav.serialize() for fav in favorite_hotels] if favorite_hotels else [],
+        "restaurants": [fav.serialize() for fav in favorite_restaurants] if favorite_restaurants else [],
+        "interest_points": [fav.serialize() for fav in favorite_interest_points] if favorite_interest_points else []
+    }
+    }
+
+
+    return jsonify(response_body), 200
+
 @api.route('/favorites-city/<int:id>', methods=['GET'])
 def traer_ciudad_favorita(id):
     City = db.session.execute(select(Favorites_city).filter_by(id=id)).scalar_one()

@@ -11,6 +11,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             hotels: [],
             restaurants: [],
             interestPoints: [],
+            favorites: [],
             demo: [
                 {
                     title: "FIRST",
@@ -48,9 +49,9 @@ const getState = ({ getStore, getActions, setStore }) => {
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ email, password })
                     });
-            
+                    
                     const data = await response.json();
-            
+                    
                     if (response.ok) {
                         localStorage.setItem("token", data.access_token);
                         localStorage.setItem("user_name", data.user_name);
@@ -58,6 +59,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                             user: { id: data.user_id, name: data.user_name }, 
                             auth: { token: data.access_token, isAuthenticated: true } 
                         });
+                        getActions().fetchFavorites(); 
                         return { success: true }; 
                     } else {
                         return { success: false, msg: data.msg };
@@ -67,7 +69,68 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return { success: false, msg: "Error de conexión con el servidor" };
                 }
             },
-            
+
+            fetchFavorites: async () => {
+                try {
+                    const store = getStore();
+                    if (!store.auth.isAuthenticated) return;
+
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/favorites", {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${store.auth.token}`,
+                            "Content-Type": "application/json"
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    if (response.ok) {
+                        setStore({ favorites: data.results });
+                    }
+                } catch (error) {
+                    console.error("Error obteniendo favoritos:", error);
+                }
+            },
+
+            addFavorite: async (type, id) => {
+                try {
+                    const store = getStore();
+                    if (!store.auth.isAuthenticated) return;
+
+                    const response = await fetch(`https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/favorite/${type}/${id}`, {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${store.auth.token}`,
+                            "Content-Type": "application/json"
+                        }
+                    });                     
+
+                    if (response.ok) {
+                        getActions().fetchFavorites();
+                    }
+                } catch (error) {
+                    console.error("Error agregando a favoritos:", error);
+                }
+            },
+
+            removeFavorite: async (type, id) => {
+                try {
+                    const store = getStore();
+                    if (!store.auth.isAuthenticated) return;
+
+                    const response = await fetch(`https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/favorite/${type}/${id}`, {
+                        method: "DELETE",
+                        headers: { "Authorization": `Bearer ${store.auth.token}` }
+                    });
+
+                    if (response.ok) {
+                        getActions().fetchFavorites(); 
+                    }
+                } catch (error) {
+                    console.error("Error eliminando de favoritos:", error);
+                }
+            },
+
 
             logout: () => {
                 localStorage.removeItem("token");
@@ -101,7 +164,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             fetchCity: async () => {
                 try {
                     console.log("Ejecutando fetchCity()");
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/city");
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/city"); // Verifica que coincida con la API
                     const data = await response.json();
                     
                     if (response.ok) {
@@ -112,14 +175,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                     console.error("Error obteniendo ciudades:", error);
                 }
             },
-            
 
             fetchHotel: async () => {
                 try {
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/hotel");
+                    console.log("Ejecutando fetchHotel()");
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/Hotel");
                     const data = await response.json();
                     if (response.ok) {
-                        setStore({ hotels: data });
+                        console.log("Hoteles obtenidos:", data.results);
+                        setStore({ hotels: data.results });
                     }
                 } catch (error) {
                     console.error("Error obteniendo hoteles:", error);
@@ -128,10 +192,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             fetchRestaurant: async () => {
                 try {
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/restaurant");
+                    console.log("Ejecutando fetchRestaurant()");
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/Restaurant");
                     const data = await response.json();
                     if (response.ok) {
-                        setStore({ restaurants: data });
+                        console.log("Restaurantes obtenidos:", data.results);
+                        setStore({ restaurants: data.results });
                     }
                 } catch (error) {
                     console.error("Error obteniendo restaurantes:", error);
@@ -140,10 +206,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             fetchInterestPoint: async () => {
                 try {
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/interest_point");
+                    console.log("Ejecutando fetchInterestPoint()");
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/Interest_point");
                     const data = await response.json();
                     if (response.ok) {
-                        setStore({ interestPoints: data });
+                        console.log("Puntos de interés obtenidos:", data.results);
+                        setStore({ interestPoints: data.results });
                     }
                 } catch (error) {
                     console.error("Error obteniendo puntos de interés:", error);

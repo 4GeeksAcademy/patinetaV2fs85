@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/home.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Carousel } from "react-bootstrap";
+
 // Importación de imágenes
 import PatinetaTravelImag1 from "../../img/1.jpg";
 import PatinetaTravelImag2 from "../../img/2.jpg";
 import PatinetaTravelImag3 from "../../img/3.jpg";
 import PatinetaTravelImag4 from "../../img/4.jpg";
 import PatinetaTravelImag5 from "../../img/5.jpg";
+
 // Importación de iconos
 import LoginLogo from "../../img/Login.jpg";
 import SignInLogo from "../../img/SignIn.jpg";
@@ -25,14 +27,25 @@ export const Home = () => {
     const isAuthenticated = store.auth?.isAuthenticated || false;
 
     const handleNavigation = (type) => {
-        if (type === "cities") {
-            actions.fetchCity();
-            navigate("/mainview");
-        } else {
-            actions.fetchHotel();
-            actions.fetchRestaurant();
-            actions.fetchInterestPoint();
-            navigate("/mainview");
+        switch (type) {
+            case "cities":
+                actions.fetchCity();
+                navigate("/mainview");
+                break;
+            case "restaurants":
+                actions.fetchRestaurant();
+                navigate("/restaurants");
+                break;
+            case "hotels":
+                actions.fetchHotel();
+                navigate("/hotels");
+                break;
+            case "interestPoints":
+                actions.fetchInterestPoint();
+                navigate("/points-of-interest");
+                break;
+            default:
+                break;
         }
     };
 
@@ -78,15 +91,15 @@ export const Home = () => {
                 </button>
                 <button className="category-button" onClick={() => handleNavigation("restaurants")}>
                     <img src={RestaurantsLogo} alt="Restaurants" className="icon" />
-                    <p>Restaurant</p>
+                    <p>Restaurants</p>
                 </button>
                 <button className="category-button" onClick={() => handleNavigation("hotels")}>
-                    <img src={HotelLogo} alt="Hotel" className="icon" />
-                    <p>Hotel</p>
+                    <img src={HotelLogo} alt="Hotels" className="icon" />
+                    <p>Hotels</p>
                 </button>
                 <button className="category-button" onClick={() => handleNavigation("interestPoints")}>
-                    <img src={InterestPointLogo} alt="Interest Point" className="icon" />
-                    <p>Interest Point</p>
+                    <img src={InterestPointLogo} alt="Interest Points" className="icon" />
+                    <p>Interest Points</p>
                 </button>
             </div>
         </div>
