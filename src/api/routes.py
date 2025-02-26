@@ -1,14 +1,20 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app
+import jwt  # Para generar tokens
+import datetime, bcrypt # Para la expiración del token
 from api.models import db, User, Favorites_city, Favorites_hotel, Favorites_interest_point, Favorites_restaurant, City, Restaurant, Interest_point, Hotel
-from api.utils import generate_sitemap, APIException
+from api.utils import generate_sitemap, APIException, send_password_reset_email
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from sqlalchemy import select
+from flask_mail import  Message
+
 
 api = Blueprint('api', __name__)
+
+
 
 # Allow CORS requests to this API
 CORS(api)
@@ -515,6 +521,80 @@ def delete_hotel(hotel_id):
 
 
     return jsonify(response_body), 200
+
+
+
+
+
+users_db = {
+
+    
+}
+
+
+
+# # Endpoint para solicitar la recuperación de la contraseña
+# @api.route('/request-password-recovery', methods=['POST'])
+# def request_password_recovery():
+#     email = request.json.get('email')
+#     # Verificar si el usuario existe
+#     print(email)
+#     user = db.session.execute(select(User).filter_by(email=email)).scalar_one_or_none()
+#     print(user)
+#     if not user:
+#         return jsonify({"message": "Usuario no encontrado"}), 400
+    
+#     # Generar el token JWT
+#     # expiration_time = 15  # El token expira en 15 minutos
+#     access_token = create_access_token(identity=user.email)
+#     # token = jwt.encode({
+#     #     'user_email': email,
+#     #     'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=access_token)
+#     # }, api.config['SECRET_KEY'], algorithm='HS256')
+#     # Enviar el correo de recuperación
+#     msg = Message('Recuperación de Contraseña',
+#                   sender='noreply@demo.com',
+#                   recipients=[email])
+#     reset_url = f'http://localhost:5000/reset-password?token={access_token}'
+#     msg.body = f'Haz clic en el siguiente enlace para restablecer tu contraseña: {reset_url}'
+#     mail.send(msg)
+#     # send_password_reset_email(email, access_token)
+#     return jsonify({"message": "Se ha enviado un enlace de recuperación a tu correo"}), 200
+
+
+
+
+
+# Endpoint para restablecer la contraseña
+# @api.route('/reset-password', methods=['POST'])
+# def reset_password():
+#     token = request.json.get('token')
+#     new_password = request.json.get('new_password')
+#     if not token or not new_password:
+#         return jsonify({"message": "Token y nueva contraseña son necesarios"}), 400
+#     try:
+#         current_user = get_jwt_identity()
+#         user = db.session.execute(select(User).filter_by(email=user_email)).scalar_one_or_none()
+#         if not user:
+#             return jsonify({"message": "Usuario no encontrado"}), 400
+#         # Encriptar la nueva contraseña
+#         hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+#         # Actualizar la contraseña del usuario
+#         user['password'] = hashed_password
+#         return jsonify({"message": "Contraseña restablecida correctamente"}), 200
+#         # Verificar el token
+#         # decoded_token = jwt.decode(token, api.config['SECRET_KEY'], algorithms=['HS256'])
+#         # user_email = decoded_token['user_email']
+#     except jwt.ExpiredSignatureError:
+#         return jsonify({"message": "El token ha expirado"}), 400
+#     except jwt.InvalidTokenError:
+#         return jsonify({"message": "Token inválido"}), 400
+#     # Buscar al usuario en la "base de datos"
+    
+
+
+
+
 
 
 
