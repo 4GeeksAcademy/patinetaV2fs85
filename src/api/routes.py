@@ -566,30 +566,35 @@ users_db = {
 
 
 # Endpoint para restablecer la contraseña
-# @api.route('/reset-password', methods=['POST'])
-# def reset_password():
-#     token = request.json.get('token')
-#     new_password = request.json.get('new_password')
-#     if not token or not new_password:
-#         return jsonify({"message": "Token y nueva contraseña son necesarios"}), 400
-#     try:
-#         current_user = get_jwt_identity()
-#         user = db.session.execute(select(User).filter_by(email=user_email)).scalar_one_or_none()
-#         if not user:
-#             return jsonify({"message": "Usuario no encontrado"}), 400
-#         # Encriptar la nueva contraseña
-#         hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
-#         # Actualizar la contraseña del usuario
-#         user['password'] = hashed_password
-#         return jsonify({"message": "Contraseña restablecida correctamente"}), 200
-#         # Verificar el token
-#         # decoded_token = jwt.decode(token, api.config['SECRET_KEY'], algorithms=['HS256'])
-#         # user_email = decoded_token['user_email']
-#     except jwt.ExpiredSignatureError:
-#         return jsonify({"message": "El token ha expirado"}), 400
-#     except jwt.InvalidTokenError:
-#         return jsonify({"message": "Token inválido"}), 400
-#     # Buscar al usuario en la "base de datos"
+
+@api.route('/reset-password', methods=['POST'])
+@jwt_required()
+def reset_password():
+    token = request.json.get('token')
+    new_password = request.json.get('new_password')
+    if not token or not new_password:
+        return jsonify({"message": "Token y nueva contraseña son necesarios"}), 400
+    try:
+        current_user = get_jwt_identity()
+        print("current_user",current_user)
+        user = db.session.execute(select(User).filter_by(email=current_user)).scalar_one_or_none()
+
+        if not user:
+            return jsonify({"message": "Usuario no encontrado"}), 400
+       
+        # Actualizar la contraseña del usuario
+        user.password = new_password
+        db.session.commit()
+        return jsonify({"message": "Contraseña restablecida correctamente"}), 200
+        
+        # Verificar el token
+        # decoded_token = jwt.decode(token, api.config['SECRET_KEY'], algorithms=['HS256'])
+        # user_email = decoded_token['user_email']
+    except jwt.ExpiredSignatureError:
+        return jsonify({"message": "El token ha expirado"}), 400
+    except jwt.InvalidTokenError:
+        return jsonify({"message": "Token inválido"}), 400
+    # Buscar al usuario en la "base de datos"
     
 
 
