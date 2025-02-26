@@ -1,4 +1,5 @@
-from flask import jsonify, url_for
+from flask import jsonify, url_for, current_app
+from flask_mail import Mail, Message
 
 class APIException(Exception):
     status_code = 400
@@ -39,3 +40,13 @@ def generate_sitemap(app):
         <p>Start working on your project by following the <a href="https://start.4geeksacademy.com/starters/full-stack" target="_blank">Quick Start</a></p>
         <p>Remember to specify a real endpoint path like: </p>
         <ul style="text-align: left;">"""+links_html+"</ul></div>"
+
+# Función para enviar el correo electrónico con el enlace de restablecimiento
+def send_password_reset_email(user_email, token):
+    msg = Message('Recuperación de Contraseña',
+                  sender='smtp@mailtrap.io',
+                  recipients=[user_email])
+    reset_url = f'http://localhost:5000/reset-password?token={token}'
+    msg.body = f'Haz clic en el siguiente enlace para restablecer tu contraseña: {reset_url}'
+    # mail.send(msg)
+    

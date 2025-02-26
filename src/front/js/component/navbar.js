@@ -27,6 +27,13 @@ const Navbar = () => {
         }, 2000);
     };
 
+    const totalFavorites = (
+        (store.favorites.cities?.length || 0) +
+        (store.favorites.hotels?.length || 0) +
+        (store.favorites.restaurants?.length || 0) +
+        (store.favorites.interest_points?.length || 0)
+    );
+
     return (
         <>
             <BootstrapNavbar expand="lg" className="custom-navbar">
@@ -50,16 +57,60 @@ const Navbar = () => {
                             <div className="d-flex align-items-center">
                                 <Dropdown>
                                     <Dropdown.Toggle variant="warning">
-                                        Favoritos ({store.favorites.length})
+                                        Favoritos ({totalFavorites})
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-                                        {store.favorites.length > 0 ? (
-                                            store.favorites.map((fav, index) => (
-                                                <Dropdown.Item key={index} className="d-flex justify-content-between align-items-center">
-                                                    <span>{fav.name}</span>
-                                                    <button className="btn btn-danger btn-sm" onClick={() => actions.removeFavorite(fav.type, fav.id)}>❌</button>
-                                                </Dropdown.Item>
-                                            ))
+                                        {totalFavorites > 0 ? (
+                                            <>
+                                                {/* Ciudades */}
+                                                {store.favorites.cities?.map((fav) => (
+                                                    <Dropdown.Item key={`city-${fav.favorites_city_id}`} className="d-flex justify-content-between align-items-center">
+                                                        <span>{fav.favorites_city_id} {/* Aquí deberías mostrar el nombre real desde City */}</span>
+                                                        <button
+                                                            className="btn btn-danger btn-sm"
+                                                            onClick={() => actions.removeFavorite("city", fav.favorites_city_id)}
+                                                        >
+                                                            ❌
+                                                        </button>
+                                                    </Dropdown.Item>
+                                                ))}
+                                                {/* Hoteles */}
+                                                {store.favorites.hotels?.map((fav) => (
+                                                    <Dropdown.Item key={`hotel-${fav.favorites_hotel_id}`} className="d-flex justify-content-between align-items-center">
+                                                        <span>{fav.favorites_hotel_id} {/* Aquí deberías mostrar el nombre real desde Hotel */}</span>
+                                                        <button
+                                                            className="btn btn-danger btn-sm"
+                                                            onClick={() => actions.removeFavorite("hotel", fav.favorites_hotel_id)}
+                                                        >
+                                                            ❌
+                                                        </button>
+                                                    </Dropdown.Item>
+                                                ))}
+                                                {/* Restaurantes */}
+                                                {store.favorites.restaurants?.map((fav) => (
+                                                    <Dropdown.Item key={`restaurant-${fav.favorites_restaurant_id}`} className="d-flex justify-content-between align-items-center">
+                                                        <span>{fav.favorites_restaurant_id} {/* Aquí deberías mostrar el nombre real desde Restaurant */}</span>
+                                                        <button
+                                                            className="btn btn-danger btn-sm"
+                                                            onClick={() => actions.removeFavorite("restaurant", fav.favorites_restaurant_id)}
+                                                        >
+                                                            ❌
+                                                        </button>
+                                                    </Dropdown.Item>
+                                                ))}
+                                                {/* Puntos de Interés */}
+                                                {store.favorites.interest_points?.map((fav) => (
+                                                    <Dropdown.Item key={`interest-${fav.favorites_interest_point_id}`} className="d-flex justify-content-between align-items-center">
+                                                        <span>{fav.favorites_interest_point_id} {/* Aquí deberías mostrar el nombre real desde Interest_point */}</span>
+                                                        <button
+                                                            className="btn btn-danger btn-sm"
+                                                            onClick={() => actions.removeFavorite("interest_point", fav.favorites_interest_point_id)}
+                                                        >
+                                                            ❌
+                                                        </button>
+                                                    </Dropdown.Item>
+                                                ))}
+                                            </>
                                         ) : (
                                             <Dropdown.Item className="text-muted">No hay favoritos</Dropdown.Item>
                                         )}
