@@ -164,7 +164,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             fetchCity: async () => {
                 try {
                     console.log("Ejecutando fetchCity()");
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/city"); // Verifica que coincida con la API
+                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/city");
                     const data = await response.json();
                     
                     if (response.ok) {

@@ -1,0 +1,126 @@
+/* Estilo base del Navbar */
+.navbar {
+    background-color: #a2cbb3!important; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+    padding: 12px 20px;
+    font-family: 'Poppins', sans-serif; 
+}
+
+.navbar-brand img {
+    height: 50px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-brand img:hover {
+    transform: scale(1.1);
+}
+
+.navbar-nav .nav-link {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff !important;
+    transition: color 0.3s ease-in-out, transform 0.2s;
+    padding: 8px 15px;
+    border-radius: 8px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #FFD700 !important;
+    transform: scale(1.05);
+}
+
+.nav-link i {
+    font-size: 22px;
+    margin-right: 5px;
+    color: #ffffff;
+}
+
+.btn-outline-danger {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border-color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-outline-danger:hover {
+    background-color: #E53935;
+    border-color: #E53935;
+}
+
+.dropdown-toggle {
+    background-color: #FFD700 !important;
+    color: #4A4A4A !important;
+    font-weight: bold;
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.dropdown-toggle:hover {
+    background-color: #FFC107 !important;
+    color: white !important;
+}
+
+.dropdown-menu {
+    background: rgba(255, 255, 255, 0.9); 
+    border: none;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+
+.dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+    color: #4A4A4A;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-danger.btn-sm {
+    font-size: 14px;
+    padding: 3px 6px;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-danger.btn-sm:hover {
+    background-color: #D32F2F;
+    border-color: #D32F2F;
+}
+
+.modal-content {
+    border-radius: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-header {
+    background-color: #FF8A65;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.modal-footer {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .dropdown-menu {
+        text-align: center;
+    }
+
+    .btn-outline-danger {
+        width: 100%;
+    }
+}

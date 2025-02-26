@@ -13,8 +13,7 @@ import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 
 import injectContext from "./store/appContext";
-import { Navbar } from "./component/navbar";
-import { Footer } from "./component/footer";
+import  Navbar  from "./component/navbar";
 import HotelsView from "./pages/HotelsView";
 import InterestPointsView from "./pages/InterestPointsView"
 
@@ -42,7 +41,6 @@ const Layout = () => {
             <Route element={<Login />} path="/login" />
             <Route element={<h1>Not found!</h1>} path="*" />
           </Routes>
-          <Footer />
         </ScrollToTop>
       </BrowserRouter>
     </div>

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../store/appContext";
+import "../../styles/pagestyles.css";
 
 const HotelsView = () => {
     const { store, actions } = useContext(Context);
@@ -14,8 +15,9 @@ const HotelsView = () => {
     }, [store.auth.isAuthenticated]);
 
     const getCityName = (hotelId) => {
+        if (!store.cities) return "Sin ciudad asignada"; 
         for (const city of store.cities) {
-            const foundHotel = city.hotel.find(h => h.id === hotelId);
+            const foundHotel = city.hotel?.find(h => h.id === hotelId);
             if (foundHotel) {
                 return city.city_name;
             }
@@ -26,15 +28,19 @@ const HotelsView = () => {
     const isFavorite = (id) => store.favorites.some(fav => fav.id === id && fav.type === "hotel");
 
     return (
-        <div className="container mt-4">
-            <h2 className="text-center">Hoteles</h2>
-            <input 
-                type="text" 
-                className="form-control mb-4" 
-                placeholder="Buscar por nombre, dirección o ciudad..." 
-                value={searchTerm} 
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
+        <div className="container page-container">
+            <h2 className="page-title">Hoteles</h2>
+
+            <div className="search-container">
+                <input 
+                    type="text" 
+                    className="form-control search-input" 
+                    placeholder="Buscar por nombre, dirección o ciudad..." 
+                    value={searchTerm} 
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+
             <div className="row">
                 {store.hotels
                     .filter(hotel => 
@@ -44,17 +50,17 @@ const HotelsView = () => {
                     )
                     .map((hotel) => (
                         <div key={hotel.id} className="col-md-4">
-                            <div className="card mb-4">
-                                <div className="card-body">
-                                    <h5 className="card-title">{hotel.hotel_name}</h5>
-                                    <p className="card-text">{hotel.hotel_description}</p>
-                                    <p className="card-text"><strong>Dirección:</strong> {hotel.hotel_address}</p>
-                                    <p className="card-text">
+                            <div className="general-card mb-4">
+                                <div className="general-card-body">
+                                    <h5 className="general-card-title">{hotel.hotel_name}</h5>
+                                    <p className="general-card-text">{hotel.hotel_description}</p>
+                                    <p className="general-card-text"><strong>Dirección:</strong> {hotel.hotel_address}</p>
+                                    <p className="general-card-text">
                                         <small className="text-muted"><strong>Ciudad:</strong> {getCityName(hotel.id)}</small>
                                     </p>
                                     {store.auth.isAuthenticated && (
                                         <button
-                                            className={`btn ${isFavorite(hotel.id) ? "btn-danger" : "btn-outline-primary"}`}
+                                            className={`btn ${isFavorite(hotel.id) ? "btn-orange" : "btn-outline-primary"}`}
                                             onClick={() => 
                                                 isFavorite(hotel.id)
                                                     ? actions.removeFavorite("hotel", hotel.id)

@@ -7,14 +7,14 @@ export const MainView = () => {
     const { store, actions } = useContext(Context);
     const [search, setSearch] = useState("");
     const [filteredResults, setFilteredResults] = useState([]);
-    const [favorites, setFavorites] = useState([]);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         actions.fetchCity();
+        if (store.auth.isAuthenticated) {
+            actions.fetchFavorites();
+        }
     }, []);
-    
 
     const handleSearch = (e) => {
         const query = e.target.value.toLowerCase();
@@ -35,110 +35,58 @@ export const MainView = () => {
         setFilteredResults([]);
     };
 
-    const handleFavorite = (city) => {
-        setFavorites((prevFavorites) =>
-            prevFavorites.some((fav) => fav.id === city.id)
-                ? prevFavorites.filter((fav) => fav.id !== city.id)
-                : [...prevFavorites, city]
-        );
+    const isFavorite = (cityId) => {
+        return store.favorites?.cities?.some((fav) => fav.city_id === cityId);
     };
 
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
+    const handleFavoriteToggle = (cityId) => {
+        if (isFavorite(cityId)) {
+            actions.removeFavorite("city", cityId);
+        } else {
+            actions.addFavorite("city", cityId);
+        }
     };
 
     return (
-        <div className="container mainview-container">
-            {/* 🔎 Barra de búsqueda */}
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <div className="position-relative w-50">
-                    <input
-                        type="text"
-                        className="form-control rounded-pill px-3"
-                        placeholder="Buscar ciudades..."
-                        value={search}
-                        onChange={handleSearch}
-                    />
-                    {filteredResults.length > 0 && (
-                        <ul
-                            className="list-group position-absolute w-100 mt-1"
-                            style={{
-                                zIndex: 1000,
-                                maxHeight: "200px",
-                                overflowY: "auto",
-                                backgroundColor: "#fff",
-                            }}
-                        >
-                            {filteredResults.map((city) => (
-                                <li
-                                    key={city.id}
-                                    className="list-group-item list-group-item-action"
-                                    onClick={() => handleCityClick(city.id)}
-                                    style={{ cursor: "pointer" }}
-                                >
-                                    {city.city_name}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-
-                {/* Favoritos */}
-                <div className="dropdown ml-3">
-                    <button
-                        className="btn btn-warning dropdown-toggle"
-                        type="button"
-                        onClick={toggleDropdown}
-                        aria-expanded={isDropdownOpen}
-                    >
-                        Favoritos ({favorites.length})
-                    </button>
-
-                    {isDropdownOpen && (
-                        <ul
-                            className="dropdown-menu dropdown-menu-end show mt-2"
-                            style={{ right: 0, left: "auto" }}
-                        >
-                            {favorites.length > 0 ? (
-                                favorites.map((city) => (
-                                    <li
-                                        key={city.id}
-                                        className="dropdown-item d-flex justify-content-between align-items-center"
-                                    >
-                                        <span
-                                            onClick={() => handleCityClick(city.id)}
-                                            style={{ cursor: "pointer", color: "blue" }}
-                                        >
-                                            {city.city_name}
-                                        </span>
-                                        <button
-                                            className="btn btn-danger btn-sm"
-                                            onClick={() => handleFavorite(city)}
-                                        >
-                                            <i className="fa fa-trash"></i>
-                                        </button>
-                                    </li>
-                                ))
-                            ) : (
-                                <li className="dropdown-item text-muted">No hay favoritos aún</li>
-                            )}
-                        </ul>
-                    )}
-                </div>
+        <div className="container-fluid mainview-container">
+            {/* 🔍 Contenedor de la barra de búsqueda */}
+            <div className="search-container">
+                <input
+                    type="text"
+                    className="form-control search-input"
+                    placeholder="🔍 Buscar ciudades..."
+                    value={search}
+                    onChange={handleSearch}
+                />
             </div>
 
-            <h2 className="text-center mb-4 mainview-title">Cities</h2>
+            {/* 📝 Lista desplegable de búsqueda */}
+            {filteredResults.length > 0 && (
+                <ul className="list-group search-dropdown">
+                    {filteredResults.map((city) => (
+                        <li
+                            key={city.id}
+                            className="list-group-item search-item"
+                            onClick={() => handleCityClick(city.id)}
+                        >
+                            {city.city_name}
+                        </li>
+                    ))}
+                </ul>
+            )}
 
-            {/* 🌍 Lista de ciudades */}
-            <div className="row">
+            <h2 className="text-center mb-4 mainview-title">🌍 Cities</h2>
+
+            {/* 🏙️ Lista de ciudades */}
+            <div className="row justify-content-center">
                 {store?.cities?.length > 0 ? (
                     store.cities
                         .filter((city) => city.city_name.toLowerCase().includes(search))
                         .map((city) => (
-                            <div key={city.id} className="col-md-4 mb-4">
+                            <div key={city.id} className="col-lg-4 col-md-6 col-sm-12 mb-4">
                                 <div className="card city-card">
                                     <img
-                                        src={city.city_image || "https://via.placeholder.com/300"}
+                                        src={city.city_image || "https://via.placeholder.com/400"}
                                         className="card-img-top city-image"
                                         alt={city.city_name}
                                     />
@@ -147,30 +95,30 @@ export const MainView = () => {
                                         <p className="card-text">{city.city_description}</p>
                                         <div className="d-flex justify-content-between">
                                             <button
-                                                className="btn btn-primary"
+                                                className="btn btn-orange"
                                                 onClick={() => handleCityClick(city.id)}
                                             >
                                                 More Information
                                             </button>
-                                            <button
-                                                className={`btn ${
-                                                    favorites.some((fav) => fav.id === city.id)
-                                                        ? "btn-success"
-                                                        : "btn-outline-danger"
-                                                }`}
-                                                onClick={() => handleFavorite(city)}
-                                            >
-                                                {favorites.some((fav) => fav.id === city.id)
-                                                    ? "❤️ Favorito"
-                                                    : "🤍 Agregar"}
-                                            </button>
+                                            {store.auth.isAuthenticated && (
+                                                <button
+                                                    className={`btn ${
+                                                        isFavorite(city.id)
+                                                            ? "btn-success"
+                                                            : "btn-outline-danger"
+                                                    }`}
+                                                    onClick={() => handleFavoriteToggle(city.id)}
+                                                >
+                                                    {isFavorite(city.id) ? "❤️ Favorito" : "🤍 Agregar"}
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         ))
                 ) : (
-                    <p>Loading cities...</p>
+                    <p className="text-center">⏳ Loading cities...</p>
                 )}
             </div>
         </div>

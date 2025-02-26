@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
-import { Dropdown, Modal, Button } from "react-bootstrap";
+import { Dropdown, Modal, Button, Navbar as BootstrapNavbar, Nav } from "react-bootstrap";
 import Logo from "../../img/PatinetaTravelLogo.png";
+import "../../styles/Navbar.css";
 
-export const Navbar = () => {
+const Navbar = () => {
     const { store, actions } = useContext(Context);
     const isAuthenticated = store.auth?.isAuthenticated || false;
     const userName = store.user?.name || localStorage.getItem("user_name");
@@ -28,46 +29,49 @@ export const Navbar = () => {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <BootstrapNavbar expand="lg" className="custom-navbar">
                 <div className="container">
-                    <Link className="navbar-brand" to="/">
+                    <BootstrapNavbar.Brand as={Link} to="/">
                         <img src={Logo} alt="Patineta Travel" style={{ height: "50px" }} />
-                    </Link>
-                    <div className="collapse navbar-collapse justify-content-center">
-                        <ul className="navbar-nav mx-auto">
-                            <li className="nav-item"><Link to="/" className="nav-link">Home</Link></li>
-                            <li className="nav-item"><Link to="/mainview" className="nav-link">Cities</Link></li>
-                            <li className="nav-item"><Link to="/restaurants" className="nav-link">Restaurant</Link></li>
-                            <li className="nav-item"><Link to="/hotels" className="nav-link">Hotel</Link></li>
-                            <li className="nav-item"><Link to="/points-of-interest" className="nav-link">Interest Point</Link></li>
-                        </ul>
-                    </div>
+                    </BootstrapNavbar.Brand>
 
-                    {isAuthenticated && (
-                        <div className="d-flex align-items-center">
-                            <Dropdown>
-                                <Dropdown.Toggle variant="warning">
-                                    Favoritos ({store.favorites.length})
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    {store.favorites.length > 0 ? (
-                                        store.favorites.map((fav, index) => (
-                                            <Dropdown.Item key={index} className="d-flex justify-content-between align-items-center">
-                                                <span>{fav.name}</span>
-                                                <button className="btn btn-danger btn-sm" onClick={() => actions.removeFavorite(fav.type, fav.id)}>❌</button>
-                                            </Dropdown.Item>
-                                        ))
-                                    ) : (
-                                        <Dropdown.Item className="text-muted">No hay favoritos</Dropdown.Item>
-                                    )}
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            <span className="nav-link ms-3"><i className="fa fa-user-circle"></i> {userName}</span>
-                            <button className="btn btn-outline-danger ms-3" onClick={() => setShowLogoutModal(true)}>Logout</button>
-                        </div>
-                    )}
+                    <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
+
+                    <BootstrapNavbar.Collapse id="basic-navbar-nav">
+                        <Nav className="mx-auto">
+                            <Nav.Link as={Link} to="/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/mainview">Cities</Nav.Link>
+                            <Nav.Link as={Link} to="/restaurants">Restaurants</Nav.Link>
+                            <Nav.Link as={Link} to="/hotels">Hotels</Nav.Link>
+                            <Nav.Link as={Link} to="/points-of-interest">Interest Points</Nav.Link>
+                        </Nav>
+
+                        {isAuthenticated && (
+                            <div className="d-flex align-items-center">
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="warning">
+                                        Favoritos ({store.favorites.length})
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        {store.favorites.length > 0 ? (
+                                            store.favorites.map((fav, index) => (
+                                                <Dropdown.Item key={index} className="d-flex justify-content-between align-items-center">
+                                                    <span>{fav.name}</span>
+                                                    <button className="btn btn-danger btn-sm" onClick={() => actions.removeFavorite(fav.type, fav.id)}>❌</button>
+                                                </Dropdown.Item>
+                                            ))
+                                        ) : (
+                                            <Dropdown.Item className="text-muted">No hay favoritos</Dropdown.Item>
+                                        )}
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                <span className="nav-link ms-3"><i className="fa fa-user-circle"></i> {userName}</span>
+                                <button className="btn btn-outline-danger ms-3" onClick={() => setShowLogoutModal(true)}>Logout</button>
+                            </div>
+                        )}
+                    </BootstrapNavbar.Collapse>
                 </div>
-            </nav>
+            </BootstrapNavbar>
 
             <Modal show={showLogoutModal} onHide={() => setShowLogoutModal(false)} centered>
                 <Modal.Header closeButton>
@@ -94,3 +98,5 @@ export const Navbar = () => {
         </>
     );
 };
+
+export default Navbar;

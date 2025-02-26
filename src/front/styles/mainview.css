@@ -1,33 +1,106 @@
-
-
+/* 🔵 Fondo de toda la página */
 .mainview-container {
-    padding: 20px;
-    background-color: #f8f9fa;
-  }
-  
-  .mainview-title {
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .city-card {
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
-  }
-  
-  .city-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .city-image {
-    border-radius: 5px;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .favorite-btn {
-    transition: background-color 0.3s ease;
-  }
-  
+  background-color: #a2cbb3;
+  min-height: 100vh;
+  padding: 50px;
+  font-family: 'Poppins', sans-serif;
+  position: relative; /* Permite posicionar el dropdown */
+}
+
+/* 🔍 Barra de búsqueda */
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.search-input {
+  font-size: 1.4rem;
+  padding: 15px 20px;
+  border-radius: 50px;
+  border: 2px solid white;
+  width: 80%;
+  max-width: 600px;
+  text-align: left;
+  background-color: #fff;
+  transition: 0.3s ease;
+  z-index: 2; /* Asegura que el input esté por encima */
+}
+
+.search-input:focus {
+  border-color: #FFAA00;
+  box-shadow: 0 0 12px rgba(255, 170, 0, 0.7);
+}
+
+/* 🎯 Lista desplegable de búsqueda */
+.search-dropdown {
+  position: absolute;
+  width: 80%;
+  max-width: 600px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 5px;
+}
+
+.search-item {
+  font-size: 1.2rem;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.search-item:hover {
+  background-color: #ffaa00;
+  color: white;
+}
+
+/* 🏙️ Título de las ciudades */
+.mainview-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 🏙️ Tarjetas de ciudades */
+.city-card {
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.city-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 🖼️ Imágenes */
+.city-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* 📋 Texto de las tarjetas */
+.card-body {
+  background-color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+/* 🎨 Botones */
+.btn-orange {
+  background-color: #FF7F50;
+  color: white;
+  border: none;
+}
+
+.btn-orange:hover {
+  background-color: #E65100;
+}

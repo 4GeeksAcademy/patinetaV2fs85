@@ -51,7 +51,21 @@ export const Home = () => {
 
     return (
         <div className="container-fluid text-center home-container">
-            <Carousel interval={4000} controls={false} indicators={false} pause="hover">
+
+            {!isAuthenticated && (
+                <div className="d-flex justify-content-center my-4">
+                    <Button className="mx-2 login-btn" onClick={() => navigate("/login")}>
+                        <img src={LoginLogo} alt="Log In" style={{ width: "120px", height: "120px" }} />
+                        Log In
+                    </Button>
+                    <Button className="mx-2 signin-btn" onClick={() => navigate("/signup")}>
+                        <img src={SignInLogo} alt="Sign In" style={{ width: "120px", height: "120px" }} />
+                        Sign In
+                    </Button>
+                </div>
+            )}
+
+            <Carousel interval={3000} controls={false} indicators={false} pause="hover">
                 <Carousel.Item>
                     <img className="d-block w-100 home-image" src={PatinetaTravelImag1} alt="Slide 1" />
                 </Carousel.Item>
@@ -70,19 +84,6 @@ export const Home = () => {
             </Carousel>
 
             <p className="lead">Search, find and enjoy...</p>
-
-            {!isAuthenticated && (
-                <div className="d-flex justify-content-center my-4">
-                    <Button className="mx-2 login-btn" onClick={() => navigate("/login")}>
-                        <img src={LoginLogo} alt="Log In" style={{ width: "120px", height: "120px" }} />
-                        Log In
-                    </Button>
-                    <Button className="mx-2 signin-btn" onClick={() => navigate("/signup")}>
-                        <img src={SignInLogo} alt="Sign In" style={{ width: "120px", height: "120px" }} />
-                        Sign In
-                    </Button>
-                </div>
-            )}
 
             <div className="categories">
                 <button className="category-button" onClick={() => handleNavigation("cities")}>
