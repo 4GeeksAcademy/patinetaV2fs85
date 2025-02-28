@@ -142,15 +142,17 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             fetchFavorites: async () => {
+                console.log("Probando");
+                
                 try {
                     const store = getStore();
-                    if (!store.auth.isAuthenticated || !store.user || !store.user.id) {
-                        console.warn("Usuario no autenticado o sin ID.");
-                        return;
-                    }
+                    // if (!store.auth.isAuthenticated || !store.user || !store.user.id) {
+                    //     console.warn("Usuario no autenticado o sin ID.");
+                    //     return;
+                    // }
             
                     const response = await fetch(
-                        `${process.env.BACKEND_URL}/api/favorites/${store.user.id}`,
+                        `${process.env.BACKEND_URL}/api/favorites`,
                         {
                             method: "GET",
                             headers: {
@@ -161,7 +163,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                     );
             
                     const data = await response.json();
+                    console.log(data);
                     if (response.ok) {
+            
+                        
                         setStore({ favorites: data.favorites || { cities: [], hotels: [], restaurants: [], interest_points: [] } });
                     } else {
                         console.error("Error en la respuesta:", data.msg || "Sin mensaje de error");

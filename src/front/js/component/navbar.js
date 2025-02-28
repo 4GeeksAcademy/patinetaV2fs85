@@ -14,9 +14,15 @@ const Navbar = () => {
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [logoutMessage, setLogoutMessage] = useState("");
 
+    // useEffect(() => {
+    //     if (isAuthenticated) actions.fetchFavorites();
+    // }, [isAuthenticated]);
     useEffect(() => {
-        if (isAuthenticated) actions.fetchFavorites();
-    }, [isAuthenticated]);
+        console.log("funciona");
+        
+        actions.fetchFavorites();
+    }, []);
+
 
     const handleLogout = () => {
         actions.logout();
@@ -60,24 +66,24 @@ const Navbar = () => {
                                         Favoritos ({totalFavorites})
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-                                        {totalFavorites > 0 ? (
+                                    {store.favorites && Object.keys(store.favorites).length ? (
                                             <>
                                                 {/* Ciudades */}
-                                                {store.favorites.cities?.map((fav) => (
-                                                    <Dropdown.Item key={`city-${fav.favorites_city_id}`} className="d-flex justify-content-between align-items-center">
-                                                        <span>{fav.favorites_city_id} {/* Aquí deberías mostrar el nombre real desde City */}</span>
+                                                {store.favorites.cities.length>0?store.favorites.cities?.map((fav) => (
+                                                    <Dropdown.Item key={`city-${fav.id}`} className="d-flex justify-content-between align-items-center">
+                                                        <span>{fav.city_id} {fav.city_name}</span>
                                                         <button
                                                             className="btn btn-danger btn-sm"
-                                                            onClick={() => actions.removeFavorite("city", fav.favorites_city_id)}
+                                                            onClick={() => actions.removeFavorite("city", fav.id)}
                                                         >
                                                             ❌
                                                         </button>
                                                     </Dropdown.Item>
-                                                ))}
+                                                )):null}
                                                 {/* Hoteles */}
-                                                {store.favorites.hotels?.map((fav) => (
+                                                {store.favorites.hotels.length>0?store.favorites.hotels?.map((fav) => (
                                                     <Dropdown.Item key={`hotel-${fav.favorites_hotel_id}`} className="d-flex justify-content-between align-items-center">
-                                                        <span>{fav.favorites_hotel_id} {/* Aquí deberías mostrar el nombre real desde Hotel */}</span>
+                                                        <span>{fav.favorites_hotel_id} {fav.hotel_name}</span>
                                                         <button
                                                             className="btn btn-danger btn-sm"
                                                             onClick={() => actions.removeFavorite("hotel", fav.favorites_hotel_id)}
@@ -85,11 +91,11 @@ const Navbar = () => {
                                                             ❌
                                                         </button>
                                                     </Dropdown.Item>
-                                                ))}
+                                                )):null}
                                                 {/* Restaurantes */}
-                                                {store.favorites.restaurants?.map((fav) => (
-                                                    <Dropdown.Item key={`restaurant-${fav.favorites_restaurant_id}`} className="d-flex justify-content-between align-items-center">
-                                                        <span>{fav.favorites_restaurant_id} {/* Aquí deberías mostrar el nombre real desde Restaurant */}</span>
+                                                {store.favorites.restaurants.length>0?store.favorites.restaurants?.map((fav) => (
+                                                    <Dropdown.Item key={`restaurant-${fav.id}`} className="d-flex justify-content-between align-items-center">
+                                                        <span>{fav.restaurant_id} {fav.restaurant_name}</span>
                                                         <button
                                                             className="btn btn-danger btn-sm"
                                                             onClick={() => actions.removeFavorite("restaurant", fav.favorites_restaurant_id)}
@@ -97,11 +103,11 @@ const Navbar = () => {
                                                             ❌
                                                         </button>
                                                     </Dropdown.Item>
-                                                ))}
+                                                )):null}
                                                 {/* Puntos de Interés */}
-                                                {store.favorites.interest_points?.map((fav) => (
+                                                {store.favorites.interest_points.length>0?store.favorites.interest_points?.map((fav) => (
                                                     <Dropdown.Item key={`interest-${fav.favorites_interest_point_id}`} className="d-flex justify-content-between align-items-center">
-                                                        <span>{fav.favorites_interest_point_id} {/* Aquí deberías mostrar el nombre real desde Interest_point */}</span>
+                                                        <span>{fav.favorites_interest_point_id} {fav.interest_point_name}</span>
                                                         <button
                                                             className="btn btn-danger btn-sm"
                                                             onClick={() => actions.removeFavorite("interest_point", fav.favorites_interest_point_id)}
@@ -109,7 +115,7 @@ const Navbar = () => {
                                                             ❌
                                                         </button>
                                                     </Dropdown.Item>
-                                                ))}
+                                                )):null}
                                             </>
                                         ) : (
                                             <Dropdown.Item className="text-muted">No hay favoritos</Dropdown.Item>
