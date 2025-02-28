@@ -8,12 +8,14 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import { MainView } from "./pages/MainView";
 import { CityView } from "./pages/CityView";
+import RestaurantsView  from "./pages/RestaurantsView";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 
 import injectContext from "./store/appContext";
-import { Navbar } from "./component/navbar";
-import { Footer } from "./component/footer";
+import  Navbar  from "./component/navbar";
+import HotelsView from "./pages/HotelsView";
+import InterestPointsView from "./pages/InterestPointsView"
 
 //create your first component
 const Layout = () => {
@@ -31,12 +33,14 @@ const Layout = () => {
             <Route element={<Demo />} path="/demo" />
             <Route element={<MainView />} path="/mainview" />
             <Route element={<CityView />} path="/city/:cityId" />
+            <Route element={<RestaurantsView />} path="/restaurants" /> 
+            <Route element={<InterestPointsView />} path="/points-of-interest" /> 
+            <Route element={<HotelsView />} path="/hotels" /> 
             <Route element={<Single />} path="/single/:theid" />
             <Route element={<SignUp />} path="/signup" />
-            <Route element={<Login />} path="/login" /> 
+            <Route element={<Login />} path="/login" />
             <Route element={<h1>Not found!</h1>} path="*" />
           </Routes>
-          <Footer />
         </ScrollToTop>
       </BrowserRouter>
     </div>
@@ -44,4 +48,3 @@ const Layout = () => {
 };
 
 export default injectContext(Layout);
-

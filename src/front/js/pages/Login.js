@@ -1,46 +1,100 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
+import { Modal, Button } from "react-bootstrap";
 
 const Login = () => {
     const { actions } = useContext(Context);
     const navigate = useNavigate();
+    const [modal, setModal] = useState({ show: false, message: "", success: false });
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const validationSchema = Yup.object({
+        email: Yup.string()
+            .email("⚠ Please enter a valid email!")
+            .required("⚠ Email is required!"),
+        password: Yup.string()
+            .min(8, "⚠ Password must be at least 8 characters!")
+            .required("⚠ Password is required!"),
+    });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const success = await actions.login(email, password);
-        if (success) {
-            navigate("/"); 
-        }
-    };
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            password: "",
+        },
+        validationSchema,
+        onSubmit: async (values) => {
+            const result = await actions.login(values.email, values.password);
+            
+            if (result.success) {
+                setModal({ show: true, message: "Login exitoso. Redirigiendo...", success: true });
+                setTimeout(() => navigate("/"), 2000);
+            } else {
+                setModal({ show: true, message: result.msg, success: false }); // 🔹 Muestra el mensaje del backend
+            }
+        },
+    });
 
     return (
-        <div className="container mt-5">
-            <div className="row justify-content-center">
-                <div className="col-md-6">
-                    <div className="card p-4">
-                        <h2 className="text-center mb-4">Log In</h2>
-                        <form onSubmit={handleSubmit}>
-                            <div className="mb-3">
-                                <label htmlFor="email" className="form-label">Email</label>
-                                <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="password" className="form-label">Password</label>
-                                <input type="password" className="form-control" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
-                            </div>
-                            <button type="submit" className="btn btn-primary w-100">Log In</button>
-                        </form>                       
-                        <p className="mt-3 text-center">
-                            Don't have an account? <Link to="/signup">Sign up here</Link>
-                        </p>
+        <div className="container d-flex justify-content-center align-items-center vh-100">
+            <div className="card shadow-lg p-5 login-card">
+                <h2 className="text-center mb-4">Log In</h2>
+                <form onSubmit={formik.handleSubmit}>
+                    {/* Email */}
+                    <div className="mb-3">
+                        <label className="form-label">Email</label>
+                        <input
+                            type="email"
+                            name="email"
+                            className={`form-control ${formik.touched.email && formik.errors.email ? "is-invalid" : ""}`}
+                            placeholder="Your email"
+                            {...formik.getFieldProps("email")}
+                        />
+                        {formik.touched.email && formik.errors.email && (
+                            <div className="invalid-feedback">{formik.errors.email}</div>
+                        )}
                     </div>
-                </div>
+
+                    <div className="mb-3">
+                        <label className="form-label">Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            className={`form-control ${formik.touched.password && formik.errors.password ? "is-invalid" : ""}`}
+                            placeholder="Your password"
+                            {...formik.getFieldProps("password")}
+                        />
+                        {formik.touched.password && formik.errors.password && (
+                            <div className="invalid-feedback">{formik.errors.password}</div>
+                        )}
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="btn btn-primary w-100"
+                        disabled={formik.isSubmitting || !formik.isValid}
+                    >
+                        Log In
+                    </button>
+                </form>
+                <p className="mt-3 text-center">
+                    Don't have an account? <Link to="/signup">Sign up here</Link>
+                </p>
             </div>
+
+            <Modal show={modal.show} onHide={() => setModal({ ...modal, show: false })} centered>
+                <Modal.Body className={`text-center ${modal.success ? "text-success" : "text-danger"}`}>
+                    {modal.message}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setModal({ ...modal, show: false })}>
+                        Cerrar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

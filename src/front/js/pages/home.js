@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 import "../../styles/home.css";
@@ -23,26 +23,49 @@ import InterestPointLogo from "../../img/InterestPoint.jpg";
 export const Home = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [view, setView] = useState(null);
+    
+    const isAuthenticated = store.auth?.isAuthenticated || false;
 
-    const handleLoadData = async (type) => {
-        if (view === type) {
-            setView(null);
-            return;
+    const handleNavigation = (type) => {
+        switch (type) {
+            case "cities":
+                actions.fetchCity();
+                navigate("/mainview");
+                break;
+            case "restaurants":
+                actions.fetchRestaurant();
+                navigate("/restaurants");
+                break;
+            case "hotels":
+                actions.fetchHotel();
+                navigate("/hotels");
+                break;
+            case "interestPoints":
+                actions.fetchInterestPoint();
+                navigate("/points-of-interest");
+                break;
+            default:
+                break;
         }
-        setLoading(true);
-        setView(type);
-        if (type === "cities") await actions.fetchCity();
-        if (type === "hotels") await actions.fetchHotel();
-        if (type === "restaurants") await actions.fetchRestaurant();
-        if (type === "interestPoints") await actions.fetchInterestPoint();
-        setLoading(false);
     };
 
     return (
         <div className="container-fluid text-center home-container">
-            <Carousel interval={4000} controls={false} indicators={false} pause="hover">
+
+            {!isAuthenticated && (
+                <div className="d-flex justify-content-center my-4">
+                    <Button className="mx-2 login-btn" onClick={() => navigate("/login")}>
+                        <img src={LoginLogo} alt="Log In" style={{ width: "120px", height: "120px" }} />
+                        Log In
+                    </Button>
+                    <Button className="mx-2 signin-btn" onClick={() => navigate("/signup")}>
+                        <img src={SignInLogo} alt="Sign In" style={{ width: "120px", height: "120px" }} />
+                        Sign In
+                    </Button>
+                </div>
+            )}
+
+            <Carousel interval={3000} controls={false} indicators={false} pause="hover">
                 <Carousel.Item>
                     <img className="d-block w-100 home-image" src={PatinetaTravelImag1} alt="Slide 1" />
                 </Carousel.Item>
@@ -62,65 +85,23 @@ export const Home = () => {
 
             <p className="lead">Search, find and enjoy...</p>
 
-            {/* Botones de Log In y Sign In */}
-            <div className="d-flex justify-content-center my-4">
-                <Button style={{ backgroundColor: "#4db6ac", color: "black", border: "2px solid black" }} className="mx-2 login-btn" onClick={() => navigate("/login")}>
-                    <img src={LoginLogo} alt="Log In" style={{ width: "120px", height: "120px", marginRight: "8px" }} />
-                    Log In
-                </Button>
-                <Button style={{ backgroundColor: "#ff8a80", color: "black", border: "2px solid black" }} className="mx-2 signin-btn" onClick={() => navigate("/signup")}>
-                    <img src={SignInLogo} alt="Sign In" style={{ width: "120px", height: "120px", marginRight: "8px" }} />
-                    Sign In
-                </Button>
-            </div>
-
-            {/* Sección de categorías con carga dinámica */}
             <div className="categories">
-                <button className="category-button" onClick={() => handleLoadData("cities")}> 
+                <button className="category-button" onClick={() => handleNavigation("cities")}>
                     <img src={CitiesLogo} alt="Cities" className="icon" />
                     <p>Cities</p>
                 </button>
-                <button className="category-button" onClick={() => handleLoadData("restaurants")}> 
+                <button className="category-button" onClick={() => handleNavigation("restaurants")}>
                     <img src={RestaurantsLogo} alt="Restaurants" className="icon" />
-                    <p>Restaurant</p>
+                    <p>Restaurants</p>
                 </button>
-                <button className="category-button" onClick={() => handleLoadData("hotels")}> 
-                    <img src={HotelLogo} alt="Hotel" className="icon" />
-                    <p>Hotel</p>
+                <button className="category-button" onClick={() => handleNavigation("hotels")}>
+                    <img src={HotelLogo} alt="Hotels" className="icon" />
+                    <p>Hotels</p>
                 </button>
-                <button className="category-button" onClick={() => handleLoadData("interestPoints")}> 
-                    <img src={InterestPointLogo} alt="Interest Point" className="icon" />
-                    <p>Interest Point</p>
+                <button className="category-button" onClick={() => handleNavigation("interestPoints")}>
+                    <img src={InterestPointLogo} alt="Interest Points" className="icon" />
+                    <p>Interest Points</p>
                 </button>
-            </div>
-
-            {/* Mostrar información al hacer clic */}
-            <div className="data-container">
-                {loading && <p>Cargando datos...</p>}
-                {view === "cities" && store.cities && store.cities.length > 0 && store.cities.map((city, index) => (
-                    <div key={index} className="data-item">
-                        <h5>{city.title}</h5>
-                        <p>{city.body}</p>
-                    </div>
-                ))}
-                {view === "restaurants" && store.restaurants && store.restaurants.length > 0 && store.restaurants.map((restaurant, index) => (
-                    <div key={index} className="data-item">
-                        <h5>{restaurant.name}</h5>
-                        <p>{restaurant.description}</p>
-                    </div>
-                ))}
-                {view === "hotels" && store.hotels && store.hotels.length > 0 && store.hotels.map((hotel, index) => (
-                    <div key={index} className="data-item">
-                        <h5>{hotel.name}</h5>
-                        <p>{hotel.email}</p>
-                    </div>
-                ))}
-                {view === "interestPoints" && store.interestPoints && store.interestPoints.length > 0 && store.interestPoints.map((point, index) => (
-                    <div key={index} className="data-item">
-                        <h5>{point.title}</h5>
-                        <p>{point.completed ? "Completado" : "Pendiente"}</p>
-                    </div>
-                ))}
             </div>
         </div>
     );

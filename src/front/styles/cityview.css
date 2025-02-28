@@ -1,29 +1,143 @@
+/* General */
 .cityview-container {
-    padding: 20px;
-  }
-  
-  .city-header {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  
+  width: 100vw; /* Se asegura que ocupe toda la pantalla */
+  max-width: 100%;
+  min-height: 100vh;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  background-color: #a2cbb3; /* Fondo consistente */
+}
+
+/* Título de la ciudad */
+.city-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Descripción de la ciudad */
+.city-description {
+  font-size: 1.2rem;
+  color: #333;
+  max-width: 800px;
+  margin: auto;
+}
+
+/* Imagen de la ciudad */
+.city-image {
+  width: 90%;
+  max-width: 900px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Sección de categorías (Hoteles, Restaurantes, Puntos de Interés) */
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  margin-top: 40px;
+}
+
+/* Sección de tarjetas */
+.city-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+/* Estilos de las tarjetas */
+.city-card {
+  max-width: 500px;
+  width: 100%;
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: #fff;
+  text-align: left;
+  padding: 20px;
+}
+
+.city-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Contenido dentro de la tarjeta */
+.card-body {
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-text {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Botones */
+.btn {
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Botón principal */
+.btn-primary {
+  background-color: #FFA07A;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #FF6347;
+}
+
+/* Botón de favoritos */
+.btn-outline-danger {
+  border: 2px solid #D9534F;
+  color: #D9534F;
+}
+
+.btn-outline-danger:hover {
+  background-color: #D9534F;
+  color: white;
+}
+
+.btn-success {
+  background-color: #5CB85C;
+}
+
+.btn-success:hover {
+  background-color: #449D44;
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
   .city-image {
-    width: 100%;
-    max-height: 300px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 20px;
+      width: 100%;
   }
-  
-  .card {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+
+  .city-card {
+      margin: 0 auto;
   }
-  
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
+}
