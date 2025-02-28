@@ -48,7 +48,7 @@ def login():
     if user is None or user.password != password:
         return jsonify({"msg": "Email o Contraseña incorrectos"}), 401
 
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=user.email)
     
     return jsonify({
         "access_token": access_token, 
@@ -86,36 +86,26 @@ def solo_un_usuario(id):
  except:
     return jsonify({"msg":"user not exist"}), 404
  
-@api.route('/favorites/<int:user_id>', methods=['GET'])
+@api.route('/favorites', methods=['GET'])
 @jwt_required()  # Requiere autenticación con token JWT
-def get_user_favorites(user_id):
+def get_user_favorites():
+
+    current_user = get_jwt_identity()
+    print(current_user)
     # Verificar que el usuario existe
-    user = db.session.execute(db.select(User).filter_by(id=user_id)).scalar_one_or_none()
+    user = db.session.execute(db.select(User).filter_by(email=current_user)).scalar_one_or_none()
+    print(user.id)
     if not user:
         return jsonify({"msg": "Usuario no encontrado"}), 404
-
-    # Obtener favoritos por categoría
-    favorite_cities = db.session.scalars(
-        db.select(Favorites_city).filter_by(favorites_user_id=user_id)
-    ).all()
-    favorite_hotels = db.session.scalars(
-        db.select(Favorites_hotel).filter_by(favorites_user_id=user_id)
-    ).all()
-    favorite_restaurants = db.session.scalars(
-        db.select(Favorites_restaurant).filter_by(favorites_user_id=user_id)
-    ).all()
-    favorite_interest_points = db.session.scalars(
-        db.select(Favorites_interest_point).filter_by(favorites_user_id=user_id)
-    ).all()
 
     # Serializar los resultados
     response_body = {
         "msg": "Favoritos del usuario",
         "favorites": {
-            "cities": [fav.serialize() for fav in favorite_cities],
-            "hotels": [fav.serialize() for fav in favorite_hotels],
-            "restaurants": [fav.serialize() for fav in favorite_restaurants],
-            "interest_points": [fav.serialize() for fav in favorite_interest_points]
+            "cities": [fav.serialize() for fav in user.favorites_city],
+            "hotels": [fav.serialize() for fav in user.favorites_hotel],
+            "restaurants": [fav.serialize() for fav in user.favorites_restaurant],
+            "interest_points": [fav.serialize() for fav in user.favorites_interest_point]
         }
     }
     
@@ -232,7 +222,7 @@ def one_interest_point(id):
 
 # # _________# Gets Hotel _________
 
-@api.route('/Hotel', methods=['GET'])
+@api.route('/hotel', methods=['GET'])
 def todos_los_hoteles():
 
     data = db.session.scalars(select(Hotel)).all()
@@ -423,8 +413,6 @@ def agregar_hotel_favorito(hotel_id):
 def delete_city(city_id):
 
     data = request.get_json()
-    print(data)
-    print(city_id)
     user_id = data.get('user_id')
 
     if not user_id:
@@ -436,7 +424,7 @@ def delete_city(city_id):
         return jsonify({"msg": "User not found"}), 404
 
     buscar_city_borrar = db.session.execute(db.select(Favorites_city).filter_by(favorites_user_id=user_id,favorites_city_id=city_id)).scalar()
-    print(buscar_city_borrar)
+
 
     if buscar_city_borrar is None:
         return jsonify({"msg": "Favorito no existe"}), 404
@@ -470,7 +458,7 @@ def delete_restaurant(restaurant_id):
 
 
     buscar_restaurant_favorito_borrar = db.session.execute(db.select(Favorites_restaurant).filter_by(favorites_user_id=user_id,favorites_restaurant_id=restaurant_id)).scalar_one()
-    print( buscar_restaurant_favorito_borrar)
+  
 
     if buscar_restaurant_favorito_borrar is None:
         return jsonify({"msg": "Restaurante Favorito no existe"}), 404

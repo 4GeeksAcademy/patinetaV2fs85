@@ -25,7 +25,7 @@ const HotelsView = () => {
         return "Sin ciudad asignada";
     };
 
-    const isFavorite = (id) => store.favorites.some(fav => fav.id === id && fav.type === "hotel");
+    // const isFavorite = (id) => store.favorites.hotels.some(fav => fav.id === id && fav.type === "hotel");
 
     return (
         <div className="container page-container">
@@ -58,7 +58,7 @@ const HotelsView = () => {
                                     <p className="general-card-text">
                                         <small className="text-muted"><strong>Ciudad:</strong> {getCityName(hotel.id)}</small>
                                     </p>
-                                    {store.auth.isAuthenticated && (
+                                    {/* {store.auth.isAuthenticated && (
                                         <button
                                             className={`btn ${isFavorite(hotel.id) ? "btn-orange" : "btn-outline-primary"}`}
                                             onClick={() => 
@@ -69,7 +69,7 @@ const HotelsView = () => {
                                         >
                                             {isFavorite(hotel.id) ? "❤️ Quitar de favoritos" : "🤍 Agregar a favoritos"}
                                         </button>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         </div>

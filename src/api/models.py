@@ -121,9 +121,11 @@ class Favorites_city (db.Model):
     favorites_city_id= db.Column(db.Integer, db.ForeignKey("city.id"))
 
     def serialize(self):
+        city = db.session.execute(db.select(City).filter_by(id=self.favorites_city_id)).scalar_one_or_none()
         return {
             "id": self.id,
-            "city_id": self.favorites_city_id            
+            "city_id": city.serialize()["id"],   
+            "city_name":city.serialize()["city_name"]           
             
 
             # do not serialize the password, its a security breach
@@ -131,17 +133,17 @@ class Favorites_city (db.Model):
 
 class Favorites_hotel (db.Model):
     __tablename__ = "favorites_hotel"
+    
     id = db.Column(Integer, primary_key=True)
     favorites_user_id= db.Column(db.Integer, db.ForeignKey("user.id"))
     favorites_hotel_id= db.Column(db.Integer, db.ForeignKey("hotel.id"))
 
     def serialize(self):
+        hotel = db.session.execute(db.select(Hotel).filter_by(id=self.favorites_hotel_id)).scalar_one_or_none()
         return {
             "id": self.id,
-            "hotel_id": self.favorites_hotel_id
-                   
-            
-
+            "hotel_id": hotel.serialize()["id"],
+            "hotel_name":hotel.serialize()["hotel_name"]    
             # do not serialize the password, its a security breach
         }
 
@@ -152,9 +154,11 @@ class Favorites_restaurant (db.Model):
     favorites_restaurant_id= db.Column(db.Integer, db.ForeignKey("restaurant.id"))
 
     def serialize(self):
+        restaurant = db.session.execute(db.select(Restaurant).filter_by(id=self.favorites_restaurant_id)).scalar_one_or_none()
         return {
             "id": self.id,
-            "hotel_id": self.favorites_restaurant_id
+            "restaurant_id": restaurant.serialize()["id"],
+            "restaurant_name":restaurant.serialize()["restaurant_name"]
                    
             
 
@@ -168,12 +172,12 @@ class Favorites_interest_point (db.Model):
     favorites_interest_point_id= db.Column(db.Integer, db.ForeignKey("interest_point.id"))
 
     def serialize(self):
+        interest_point = db.session.execute(db.select(Interest_point).filter_by(id=self.favorites_interest_point_id)).scalar_one_or_none()
         return {
             "id": self.id,
-            "hotel_id": self.favorites_interest_point_id
+            "interest_point_id": interest_point.serialize()["id"], 
+            "interest_point_name":interest_point.serialize()["int_name"]    
                    
-            
-
             # do not serialize the password, its a security breach
         }
 

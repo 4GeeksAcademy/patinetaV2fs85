@@ -24,7 +24,7 @@ const RestaurantsView = () => {
         return "Sin ciudad asignada";
     };
 
-    const isFavorite = (id) => store.favorites.some(fav => fav.id === id && fav.type === "restaurant");
+    // const isFavorite = (id) => store.favorites.some(fav => fav.id === id && fav.type === "restaurant");
 
     return (
         <div className="container page-container">
@@ -55,7 +55,7 @@ const RestaurantsView = () => {
                                             <strong>Ciudad:</strong> {getCityName(restaurant.id)}
                                         </small>
                                     </p>
-                                    {store.auth.isAuthenticated && (
+                                    {/* {store.auth.isAuthenticated && (
                                         <button
                                             className={`btn ${isFavorite(restaurant.id) ? "btn-orange" : "btn-outline-primary"}`}
                                             onClick={() => 
@@ -66,7 +66,7 @@ const RestaurantsView = () => {
                                         >
                                             {isFavorite(restaurant.id) ? "❤️ Quitar de favoritos" : "🤍 Agregar a favoritos"}
                                         </button>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         </div>
