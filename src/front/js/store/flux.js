@@ -166,7 +166,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             fetchCity: async () => {
                 try {
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/city");
+                    const response = await fetch(process.env.BACKEND_URL+"/api/city");
                     const data = await response.json();
                     if (response.ok) {
                         setStore({ cities: data.results });
