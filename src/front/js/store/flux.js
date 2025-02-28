@@ -36,7 +36,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             // LOGIN.JS
             login: async (email, password) => {
                 try {
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/login", {
+                    const response = await fetch(process.env.BACKEND_URL+"/api/login", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ email, password })
@@ -68,6 +68,79 @@ const getState = ({ getStore, getActions, setStore }) => {
                 setStore({ user: null, auth: { token: null, isAuthenticated: false } });
             },
 
+             // SIGNUP.JS (Registro)
+             signup: async (name, email, password) => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL+"/api/signup", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ name, email, password })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert("Cuenta creada exitosamente!");
+                        return true;
+                    } else {
+                        alert(`Error: ${data.msg}`);
+                        return false;
+                    }
+                } catch (error) {
+                    console.error("Error durante el registro:", error);
+                    alert(" Algo salió mal, por favor intenta de nuevo.");
+                    return false;
+                }
+            },
+
+            fetchCity: async () => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL+"/api/city");
+                    const data = await response.json();
+                    if (response.ok) {
+                        setStore({ cities: data.results });
+                    }
+                } catch (error) {
+                    console.error("Error obteniendo ciudades:", error);
+                }
+            },
+
+            fetchHotel: async () => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL+"/api/Hotel");
+                    const data = await response.json();
+                    if (response.ok) {
+                        setStore({ hotels: data.results });
+                    }
+                } catch (error) {
+                    console.error("Error obteniendo hoteles:", error);
+                }
+            },
+
+            fetchRestaurant: async () => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL+"/api/Restaurant");
+                    const data = await response.json();
+                    if (response.ok) {
+                        setStore({ restaurants: data.results });
+                    }
+                } catch (error) {
+                    console.error("Error obteniendo restaurantes:", error);
+                }
+            },
+
+            fetchInterestPoint: async () => {
+                try {
+                    const response = await fetch(process.env.BACKEND_URL+"/api/Interest_point");
+                    const data = await response.json();
+                    if (response.ok) {
+                        setStore({ interestPoints: data.results });
+                    }
+                } catch (error) {
+                    console.error("Error obteniendo puntos de interés:", error);
+                }
+            },
+
             fetchFavorites: async () => {
                 try {
                     const store = getStore();
@@ -77,7 +150,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
             
                     const response = await fetch(
-                        `https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/favorites/${store.user.id}`,
+                        `${process.env.BACKEND_URL}/api/favorites/${store.user.id}`,
                         {
                             method: "GET",
                             headers: {
@@ -112,7 +185,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         interest_point: "Interest_point"
                     };
 
-                    const url = `https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/favorite/${categoryMap[category]}/${itemId}`;
+                    const url = `${process.env.BACKEND_URL}/api/favorite/${categoryMap[category]}/${itemId}`;
                     const response = await fetch(url, {
                         method: "POST",
                         headers: {
@@ -144,7 +217,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         interest_point: "interest_point"
                     };
 
-                    const url = `https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/favorite/${categoryMap[category]}/${itemId}`;
+                    const url = `${process.env.BACKEND_URL}/api/favorite/${categoryMap[category]}/${itemId}`;
                     const response = await fetch(url, {
                         method: "DELETE",
                         headers: {
@@ -161,54 +234,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                     }
                 } catch (error) {
                     console.error("Error eliminando favorito:", error);
-                }
-            },
-
-            fetchCity: async () => {
-                try {
-                    const response = await fetch(process.env.BACKEND_URL+"/api/city");
-                    const data = await response.json();
-                    if (response.ok) {
-                        setStore({ cities: data.results });
-                    }
-                } catch (error) {
-                    console.error("Error obteniendo ciudades:", error);
-                }
-            },
-
-            fetchHotel: async () => {
-                try {
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/Hotel");
-                    const data = await response.json();
-                    if (response.ok) {
-                        setStore({ hotels: data.results });
-                    }
-                } catch (error) {
-                    console.error("Error obteniendo hoteles:", error);
-                }
-            },
-
-            fetchRestaurant: async () => {
-                try {
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/Restaurant");
-                    const data = await response.json();
-                    if (response.ok) {
-                        setStore({ restaurants: data.results });
-                    }
-                } catch (error) {
-                    console.error("Error obteniendo restaurantes:", error);
-                }
-            },
-
-            fetchInterestPoint: async () => {
-                try {
-                    const response = await fetch("https://cautious-succotash-4jg4p4xqvwx6cvww-3001.app.github.dev/api/Interest_point");
-                    const data = await response.json();
-                    if (response.ok) {
-                        setStore({ interestPoints: data.results });
-                    }
-                } catch (error) {
-                    console.error("Error obteniendo puntos de interés:", error);
                 }
             }
         }
