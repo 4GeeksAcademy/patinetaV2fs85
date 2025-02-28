@@ -222,7 +222,7 @@ def one_interest_point(id):
 
 # # _________# Gets Hotel _________
 
-@api.route('/Hotel', methods=['GET'])
+@api.route('/hotel', methods=['GET'])
 def todos_los_hoteles():
 
     data = db.session.scalars(select(Hotel)).all()
@@ -413,8 +413,6 @@ def agregar_hotel_favorito(hotel_id):
 def delete_city(city_id):
 
     data = request.get_json()
-    print(data)
-    print(city_id)
     user_id = data.get('user_id')
 
     if not user_id:
@@ -426,7 +424,7 @@ def delete_city(city_id):
         return jsonify({"msg": "User not found"}), 404
 
     buscar_city_borrar = db.session.execute(db.select(Favorites_city).filter_by(favorites_user_id=user_id,favorites_city_id=city_id)).scalar()
-    print(buscar_city_borrar)
+
 
     if buscar_city_borrar is None:
         return jsonify({"msg": "Favorito no existe"}), 404
@@ -460,7 +458,7 @@ def delete_restaurant(restaurant_id):
 
 
     buscar_restaurant_favorito_borrar = db.session.execute(db.select(Favorites_restaurant).filter_by(favorites_user_id=user_id,favorites_restaurant_id=restaurant_id)).scalar_one()
-    print( buscar_restaurant_favorito_borrar)
+  
 
     if buscar_restaurant_favorito_borrar is None:
         return jsonify({"msg": "Restaurante Favorito no existe"}), 404

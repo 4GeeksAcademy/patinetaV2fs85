@@ -107,7 +107,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             fetchHotel: async () => {
                 try {
-                    const response = await fetch(process.env.BACKEND_URL+"/api/Hotel");
+                    const response = await fetch(process.env.BACKEND_URL+"/api/hotel");
                     const data = await response.json();
                     if (response.ok) {
                         setStore({ hotels: data.results });
@@ -142,7 +142,6 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             fetchFavorites: async () => {
-                console.log("Probando");
                 
                 try {
                     const store = getStore();
@@ -163,10 +162,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                     );
             
                     const data = await response.json();
-                    console.log(data);
+
+                    
                     if (response.ok) {
             
-                        
                         setStore({ favorites: data.favorites || { cities: [], hotels: [], restaurants: [], interest_points: [] } });
                     } else {
                         console.error("Error en la respuesta:", data.msg || "Sin mensaje de error");
@@ -211,9 +210,10 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             removeFavorite: async (category, itemId) => {
+                
                 try {
                     const store = getStore();
-                    if (!store.auth.isAuthenticated || !store.user) return;
+                    // if (!store.auth.isAuthenticated || !store.user) return;
 
                     const categoryMap = {
                         city: "city",

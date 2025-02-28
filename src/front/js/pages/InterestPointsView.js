@@ -24,7 +24,7 @@ const InterestPointsView = () => {
         return "Sin ciudad asignada";
     };
 
-    const isFavorite = (id) => store.favorites.some(fav => fav.id === id && fav.type === "interest_point");
+    // const isFavorite = (id) => store.favorites.some(fav => fav.id === id && fav.type === "interest_point");
 
     return (
         <div className="container page-container">
@@ -57,7 +57,7 @@ const InterestPointsView = () => {
                                             <strong>Ciudad:</strong> {getCityName(point.id)}
                                         </small>
                                     </p>
-                                    {store.auth.isAuthenticated && (
+                                    {/* {store.auth.isAuthenticated && (
                                         <button
                                             className={`btn ${isFavorite(point.id) ? "btn-orange" : "btn-outline-primary"}`}
                                             onClick={() => 
@@ -68,7 +68,7 @@ const InterestPointsView = () => {
                                         >
                                             {isFavorite(point.id) ? "❤️ Quitar de favoritos" : "🤍 Agregar a favoritos"}
                                         </button>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                         </div>

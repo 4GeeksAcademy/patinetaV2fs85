@@ -14,14 +14,12 @@ const Navbar = () => {
     const [showLogoutModal, setShowLogoutModal] = useState(false);
     const [logoutMessage, setLogoutMessage] = useState("");
 
-    // useEffect(() => {
-    //     if (isAuthenticated) actions.fetchFavorites();
-    // }, [isAuthenticated]);
+ 
     useEffect(() => {
-        console.log("funciona");
-        
-        actions.fetchFavorites();
-    }, []);
+        if(isAuthenticated){
+            actions.fetchFavorites();
+        }
+    }, [isAuthenticated]);
 
 
     const handleLogout = () => {
@@ -82,11 +80,11 @@ const Navbar = () => {
                                                 )):null}
                                                 {/* Hoteles */}
                                                 {store.favorites.hotels.length>0?store.favorites.hotels?.map((fav) => (
-                                                    <Dropdown.Item key={`hotel-${fav.favorites_hotel_id}`} className="d-flex justify-content-between align-items-center">
+                                                    <Dropdown.Item key={`hotel-${fav.id}`} className="d-flex justify-content-between align-items-center">
                                                         <span>{fav.favorites_hotel_id} {fav.hotel_name}</span>
                                                         <button
                                                             className="btn btn-danger btn-sm"
-                                                            onClick={() => actions.removeFavorite("hotel", fav.favorites_hotel_id)}
+                                                            onClick={() => actions.removeFavorite("hotel", fav.id)}
                                                         >
                                                             ❌
                                                         </button>
@@ -98,7 +96,7 @@ const Navbar = () => {
                                                         <span>{fav.restaurant_id} {fav.restaurant_name}</span>
                                                         <button
                                                             className="btn btn-danger btn-sm"
-                                                            onClick={() => actions.removeFavorite("restaurant", fav.favorites_restaurant_id)}
+                                                            onClick={() => actions.removeFavorite("restaurant", fav.id)}
                                                         >
                                                             ❌
                                                         </button>
@@ -106,11 +104,11 @@ const Navbar = () => {
                                                 )):null}
                                                 {/* Puntos de Interés */}
                                                 {store.favorites.interest_points.length>0?store.favorites.interest_points?.map((fav) => (
-                                                    <Dropdown.Item key={`interest-${fav.favorites_interest_point_id}`} className="d-flex justify-content-between align-items-center">
-                                                        <span>{fav.favorites_interest_point_id} {fav.interest_point_name}</span>
+                                                    <Dropdown.Item key={`interest-${fav.id}`} className="d-flex justify-content-between align-items-center">
+                                                        <span>{fav.interest_point_id} {fav.interest_point_name}</span>
                                                         <button
                                                             className="btn btn-danger btn-sm"
-                                                            onClick={() => actions.removeFavorite("interest_point", fav.favorites_interest_point_id)}
+                                                            onClick={() => actions.removeFavorite("interest_point", fav.id)}
                                                         >
                                                             ❌
                                                         </button>
